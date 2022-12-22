@@ -1,0 +1,5 @@
+library(ggplot2)
+library(readxl)
+delta <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Figures/delta.xlsx")
+ggplot(delta,aes(x=K,y=delta))+geom_line(color="black") + geom_point(color="cadetblue",size=6)+theme_bw()+ylab("∆K")
+ggsave("~/delta.svg")
