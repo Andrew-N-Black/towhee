@@ -70,12 +70,6 @@ SCAL 0.27    5.2e-09 2.0e-09
 
 P value adjustment method: BH 
 
-
-
-
-
-
-
 data:  ind_roh$Total and ind_roh$Pop 
 
      CCAL    INYO    OREG   
@@ -84,5 +78,21 @@ OREG 8.1e-07 0.023   -
 SCAL 0.233   1.9e-08 1.9e-08
 
 P value adjustment method: BH 
+
+
+
+#Summarize ROHs by factor
+library(dplyr)
+ind_roh$Pop <- ordered(ind_roh$Pop,levels = c("OREG","CCAL","INYO","SCAL"))
+
+group_by(ind_roh, Pop) %>% summarise(count = n(),mean = mean(`100kb-1MB`, na.rm = TRUE),sd = sd(`100kb-1MB`, na.rm = TRUE),median = median(`100kb-1MB`, na.rm = TRUE),IQR = IQR(`100kb-1MB`, na.rm = TRUE))
+
+group_by(ind_roh, Pop) %>% summarise(count = n(),mean = mean(`>1MB`, na.rm = TRUE),sd = sd(`>1MB`, na.rm = TRUE),median = median(`>1MB`, na.rm = TRUE),IQR = IQR(`>1MB`, na.rm = TRUE))
+
+
+group_by(ind_roh, Pop) %>% summarise(count = n(),mean = mean(`Total`, na.rm = TRUE),sd = sd(`Total`, na.rm = TRUE),median = median(`Total`, na.rm = TRUE),IQR = IQR(`Total`, na.rm = TRUE))
+
+
+
 
 
