@@ -14,29 +14,29 @@ ggsave("S1a.pdf")
 depth_breadth <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/summary_stats.xlsx")
 depth_breadth$Pop <- factor(depth_breadth$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 depth_breadth$Filter <- factor(depth_breadth$Filter, levels = c("Pre","Post"))
-ggplot(data=depth_breadth, aes(y=Depth, x=reorder(SampleID,Depth),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("grey","bisque","black","cadetblue"))+xlab("Sample (N=81)")+ylab("Mean Depth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
+ggplot(data=depth_breadth, aes(y=Depth, x=reorder(SampleID,Depth),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("Mean Depth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
 ggsave("S1b.svg")
 ggsave("S1b.pdf")
 
 #Mean Breadth 1x
-ggplot(data=depth_breadth, aes(y=Breadth1x, x=reorder(SampleID,Breadth1x),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("grey","bisque","black","cadetblue"))+xlab("Sample (N=81)")+ylab("1x Breadth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+facet_wrap(~Filter,ncol=1)
+ggplot(data=depth_breadth, aes(y=Breadth1x, x=reorder(SampleID,Breadth1x),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("1x Breadth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+facet_wrap(~Filter,ncol=1)
 ggsave("S1c.svg")
 ggsave("S1c.pdf")
 
 
 #Mean Breadth 5x
-ggplot(data=depth_breadth, aes(y=Breadth5x, x=reorder(SampleID,Breadth5x),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("grey","bisque","black","cadetblue"))+xlab("Sample (N=81)")+ylab("5x Breadth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+facet_wrap(~Filter,ncol=1)
+ggplot(data=depth_breadth, aes(y=Breadth5x, x=reorder(SampleID,Breadth5x),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("5x Breadth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+facet_wrap(~Filter,ncol=1)
 ggsave("S1d.svg")
 ggsave("S1d.pdf")
 
 #Mapping rate
 map <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/mapping_rate.xlsx")
 map$Pop <- factor(map$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
-ggplot(data=map, aes(y=MappingTotal, x=reorder(SampleID,MappingTotal),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("grey","bisque","black","cadetblue"))+xlab("Sample (N=81)")+ylab("% Mapped Reads")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
+ggplot(data=map, aes(y=MappingTotal, x=reorder(SampleID,MappingTotal),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("% Mapped Reads")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
 ggsave("S1e.svg")
 ggsave("S1e.pdf")
 
-ggplot(data=map, aes(y=MappingPaired, x=reorder(SampleID,MappingPaired),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("grey","bisque","black","cadetblue"))+xlab("Sample (N=81)")+ylab("% Mapped Properly Paired Reads")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
+ggplot(data=map, aes(y=MappingPaired, x=reorder(SampleID,MappingPaired),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("% Mapped Properly Paired Reads")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())
 
 ggsave("S1f.svg")
 ggsave("S1f.pdf")
