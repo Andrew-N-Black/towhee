@@ -9,6 +9,7 @@ library(pophelper)
 #Figure.3.pop <- read.csv("~/Figure 3 pop.txt", sep="")
 sample_pop_sites <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/het.xlsx")
 cov <- as.matrix("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/pca-towhee.cov")
+axes<-eigen(cov)
 head(axes$values/sum(axes$values)*100)
 #[1] 7.633992 5.665231 4.160406 2.030399 1.893622
  pca1<-glPca(dace,nf=2,parallel = TRUE,n.cores = 4)
