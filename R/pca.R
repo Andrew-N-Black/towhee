@@ -19,7 +19,7 @@ title1<-"Population"
 title2<-"Site"
 
 #By Population
-ggplot(data=PC1_3, aes(y=V2, x=V1))+geom_point(size=7,pch=21,aes(fill=sample_pop_sites$Pop))+ theme_classic() + xlab("PC1 (7.75%)") +ylab("PC2 (5.94%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+scale_fill_manual("Population", values=c("grey","tan2","black","cadetblue"))
+ggplot(data=PC1_3, aes(y=V2, x=V1))+geom_point(size=7,pch=21,aes(fill=sample_pop_sites$Pop))+ theme_classic() + xlab("PC1 (7.75%)") +ylab("PC2 (5.94%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+scale_fill_manual("Population", values=c("darkorchid","tan2","black","cadetblue"))
 
 ggsave("~/pca.towhee.svg")
 ggsave("~/pca.towhee.pdf")
