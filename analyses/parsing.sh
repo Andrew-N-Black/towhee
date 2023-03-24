@@ -1,20 +1,24 @@
 ml bioinfo
 ml bedtools
+ml bioawk
 
 #GENES
 awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' GCF_028551555.1_PUWL_Pcris_2_genomic.gtf |  bedtools sort | bedtools merge -i - > towhee_genes.bed
 
 
 #INTER
-awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4,$5}' GCF_028551555.1_PUWL_Pcris_2_genomic.gtf > gencode_v14_exon.bed
+awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4,$5}' GCF_028551555.1_PUWL_Pcris_2_genomic.gtf > exon.bed
 head gencode_v14_exon.bed
-sortBed -i gencode_v14_exon.bed > gencode_v14_exon_temp.bed
-mv -f gencode_v14_exon_temp.bed gencode_v14_exon.bed
-mergeBed -i gencode_v14_exon.bed > gencode_v14_exon_merged.bed
-cat GCF_028551555.1_PUWL_Pcris_2_genomic.gtf | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4,$5}' > gencode_v14_gene.bed
-sortBed -i gencode_v14_gene.bed > gencode_v14_gene_temp.bed
-mv -f gencode_v14_gene_temp.bed gencode_v14_gene.bed
-subtractBed -a gencode_v14_gene.bed -b gencode_v14_exon_merged.bed > gencode_v14_intron.bed
+sortBed -i exon.bed > exon_temp.bed
+mv -f exon_temp.bed exon.bed
+mergeBed -i v14_exon.bed > exon_merged.bed
+cat GCF_028551555.1_PUWL_Pcris_2_genomic.gtf | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4,$5}' > gene.bed
+sortBed -i gene.bed > gene_temp.bed
+mv -f gene_temp.bed gene.bed
+subtractBed -a gene.bed -b exon_merged.bed > intron.bed
+bioawk -c fastx '{ print $name, length($seq) }' < GCF_028551555.1_PUWL_Pcris_2_genomic.fna > chrom
+complementBed -i gene.bed -g chrom > towhee_intergenic.bed
+
 
 
 
