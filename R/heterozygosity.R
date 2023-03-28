@@ -21,5 +21,3 @@ group_by(het, Pop) %>% summarise(count = n(),mean = mean(`HET`, na.rm = TRUE),sd
 3 INYO     14 0.00180 0.000188  0.00185
 4 SCAL     23 0.00246 0.0000572 0.00247
 
-#ind_roh$Pop <- ordered(ind_roh$Pop,levels = c("OREG","CCAL","INYO","SCAL"))
-#group_by(het, Pop) %>% summarise(count = n(),mean = mean(`HET`, na.rm = TRUE),sd = sd(`HET`, na.rm = TRUE),median = median(`HET`, na.rm = TRUE),IQR = IQR(`HET`, na.rm = TRUE))
