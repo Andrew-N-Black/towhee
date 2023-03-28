@@ -10,6 +10,16 @@ ggplot(data=length_scaff, aes(y=LengthKB,x=reorder(LengthKB,Contig)))+geom_bar(s
 ggsave("S1a.svg")
 ggsave("S1a.pdf")
 
+
+
+
+#Pre/post breadth
+depth_breadth <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/summary_stats.xlsx")
+depth_breadth$Pop <- factor(depth_breadth$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
+
+ggplot(data=depth_breadth, aes(y=Breadth5x, x=reorder(SampleID,Breadth5x),fill=Pop))+geom_bar(stat="identity")+theme_classic()+scale_fill_manual("Population",values=c("darkorchid","tan2","black","cadetblue"))+xlab("Sample (N=81)")+ylab("5x Breadth")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+facet_wrap(~Filter,ncol=1)
+
+
 #Mean Depth
 depth_breadth <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/summary_stats.xlsx")
 depth_breadth$Pop <- factor(depth_breadth$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
