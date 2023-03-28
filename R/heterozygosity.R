@@ -21,3 +21,30 @@ group_by(het, Pop) %>% summarise(count = n(),mean = mean(`HET`, na.rm = TRUE),sd
 3 INYO     14 0.00180 0.000188  0.00185
 4 SCAL     23 0.00246 0.0000572 0.00247
 
+shapiro.test(het$HET)
+
+	Shapiro-Wilk normality test
+
+data:  het$HET
+W = 0.93444, p-value = 0.0004497
+
+kruskal.test(HET ~ Pop, data = het)
+
+	Kruskal-Wallis rank sum test
+
+data:  HET by Pop
+Kruskal-Wallis chi-squared =
+65.821, df = 3, p-value = 3.347e-14
+
+pairwise.wilcox.test(het$HET, het$Pop, p.adjust.method = "BH")
+
+	Pairwise comparisons using Wilcoxon rank sum exact test 
+
+data:  het$HET and het$Pop 
+
+     OREG    CCAL    INYO   
+CCAL 3.6e-09 -       -      
+INYO 0.0049  0.0001  -      
+SCAL 6.5e-10 1.9e-14 6.5e-10
+
+P value adjustment method: BH 
