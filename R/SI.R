@@ -62,11 +62,31 @@ ggplot(data=map, aes(y=MappingPaired, x=reorder(SampleID,MappingPaired),fill=Pop
 ggsave("S1f.svg")
 ggsave("S1f.pdf")
 
+
+#Figure S6, PCA
+
+sample_pop_sites <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/het.xlsx")
+sample_pop_sites$Pop <- factor(sample_pop_sites$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
+sample_pop_sites <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/het.xlsx")
+sample_pop_sites$Pop <- factor(sample_pop_sites$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
+cov<-as.matrix(read.table("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/pca-towhee.cov"))
+axes<-eigen(cov)
+head(axes$values/sum(axes$values)*100)
+
+x<-cbind(PC1_3,sample_pop_sites)
+ggplot(data=x, aes(y=V2, x=V1,colour=Sites,shape=Pop))+geom_point(size=7)+ theme_classic() + xlab("PC1 (7.75%)") +ylab("PC2 (5.94%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+scale_fill_manual("Population", values=c("darkorchid","tan2","black","cadetblue"))+scale_shape_manual("Sites", values=c(4,20,10,23))
+ggsave("~/Figure_S6.svg")
+ggsave("~/Figure_S6.pdf")
+
+
+
+
 #Phred score distribution (Fig_S3)
 
 phred<-read.table("~/LEPC_full_qaNF.qs",header = T)
 ggplot(phred, aes(x=qscore,y=counts)) + geom_bar(stat="identity")+theme_classic()+ scale_x_discrete(name ="Phred score",limits=c(13:37))+ylab("Number of bases") + geom_vline(xintercept = 30,linetype="dashed")
 ggsave("~/phred_lepc.svg")
 ggsave("~/phred_lepc.pdf")
+
 
        
