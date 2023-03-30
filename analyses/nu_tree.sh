@@ -25,3 +25,5 @@ bcftools mpileup -f /scratch/bell/blackan/TOWHEE/ref/NCBI/ref_100kb.fa \
 vk phylo fasta towhee_filtered.vcf.recode.vcf > towhee_nu.fasta
 iqtree -s towhee_nu.fasta -B 1000 -alrt 1000 -T 16
 
+#Alignment has 81 sequences with 8246056 columns, 5803135 distinct patterns
+#5119975 parsimony-informative, 1051380 singleton sites, 2074700 constant sites
