@@ -1,5 +1,5 @@
 library(ggplot2)
 library(readxl)
-delta <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Figures/delta.xlsx")
-ggplot(delta,aes(x=K,y=delta))+geom_line(color="black") + geom_point(color="cadetblue",size=6)+theme_bw()+ylab("∆K")
+delta <- read_excel("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/k.xlsx")
+ggplot(delta,aes(x=K,y=`mean(|L"(K)|)/stdev[L(K)]")`))+geom_line(color="black") + geom_point(color="cadetblue",size=6)+theme_classic()+ylab("∆K")
 ggsave("~/delta.svg")
