@@ -3,6 +3,7 @@ library(readxl)
 library(reshape2)
 
 ind_roh <-read_excel("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/ind_rohs.xlsx")
+ind_roh<-as.data.frame(ind_roh)
 melt_data<-melt(ind_roh,id.vars = c("sample","Pop","Sites"))
 melt_data$Pop <- factor(melt_data$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 
