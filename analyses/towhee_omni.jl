@@ -24,29 +24,40 @@ currmap, flow_pot, norm_current = run_omniscape("/scratch/bell/jeon96/Towhee/omn
 exit()
 
 # Again in R - plotting
+#library(raster)
 #library(colorspace)
+#library(rasterVis)
+#library(dplyr)
+#library(latticeExtra)
 #curr <- raster("/scratch/bell/jeon96/Towhee/omniscape/all/_3/cum_currmap.tif")
 #mywindow <- extent(curr)
 #towhee_sites <- read.csv("/scratch/bell/jeon96/Towhee/towhee_longlat.csv")
 #towhee_sites_ord <- towhee_sites %>% arrange(desc(Lat)) #arrange sites by descending latitude
 #towhee_sites_coords_raw <- SpatialPoints(coords = towhee_sites_ord[,2:3], proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
 #towhee_sites_coords <- spTransform(towhee_sites_coords_raw, crs("+proj=longlat +datum=WGS84 +no_defs"))
-#color <- colorspace::terrain_hcl(100,rev=TRUE)
-#plot(curr, main="Cumulative Current Flow", xlab="Longitude", ylab="Latitude", col=color, ext=mywindow)
+##color <- colorspace::terrain_hcl(100,rev=TRUE)
+##plot(curr, z=z, main="Cumulative Current Flow", xlab="Longitude", ylab="Latitude", col=color, ext=mywindow)
+#breaks=seq(0,9,0.01) # common range among the three cases
+#cols <- colorRampPalette(c("brown4", "lightgoldenrodyellow", "darkgreen"))(length(breaks) - 1)
+#levelplot(curr, main="Cumulative Current Flow",  margin=FALSE, at = breaks, col.regions = cols) + layer(sp.points(towhee_sites_coords, pch=3, cex=1, col="darkblue"))
 
-#tiff("all_cum_currmap.tif", width=6, height=6, units='in', res=300)
-#plot(curr, main="Cumulative Current Flow", xlab="Longitude", ylab="Latitude", col=color, ext=mywindow)
-#points(towhee_sites_coords, col="darkblue", pch=3)
+#tiff("all_cum_currmap_re.tif", width=6, height=6, units='in', res=300)
+#levelplot(curr, main="Cumulative Current Flow",  margin=FALSE, at = breaks, col.regions = cols) + layer(sp.points(towhee_sites_coords, pch=3, cex=1, col="darkblue"))
 #dev.off()
 
 #setwd("/scratch/bell/jeon96/Towhee/omniscape/")
-#ras <- raster("surf_f.asc")
+#ras <- raster("surf.asc")
 #mywindow <- extent(ras)
-#towheeF_sites <- read.csv("/scratch/bell/jeon96/Towhee/towheeF_longlat.csv")
-#towheeF_sites_ord <- towheeF_sites %>% arrange(desc(Lat)) #arrange sites by descending latitude
-#towheeF_sites_coords_raw <- SpatialPoints(coords = towheeF_sites_ord[,2:3], proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
-#towheeF_sites_coords <- spTransform(towheeF_sites_coords_raw, crs("+proj=longlat +datum=WGS84 +no_defs"))
-#tiff("female_resistance.tiff", units="in", width=6, height=6, res=300)
-#plot(ras, main="Optimized Resistance", xlab="Longitude", ylab="Latitude", col=color, ext=mywindow)
-#points(towheeF_sites_coords, col="darkblue", pch=3)
+#breaks=seq(0,19,0.01) # common range among the three cases
+#cols <- colorRampPalette(c("darkgreen", "lightgoldenrodyellow", "brown4"))(length(breaks) - 1)
+#towhee_sites <- read.csv("/scratch/bell/jeon96/Towhee/towhee_longlat.csv")
+#towhee_sites_ord <- towhee_sites %>% arrange(desc(Lat)) #arrange sites by descending latitude
+#towhee_sites_coords_raw <- SpatialPoints(coords = towhee_sites_ord[,2:3], proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
+#towhee_sites_coords <- spTransform(towhee_sites_coords_raw, crs("+proj=longlat +datum=WGS84 +no_defs"))
+#levelplot(ras, main="Optimized Resistance",  margin=FALSE, at = breaks, col.regions = cols, ext=mywindow) + layer(sp.points(towhee_sites_coords, pch=3, cex=1, col="darkblue"))
+
+#tiff("all_resistance_re.tiff", units="in", width=6, height=6, res=300)
+##plot(ras, main="Optimized Resistance", xlab="Longitude", ylab="Latitude", col=color, ext=mywindow)
+##points(towhee_sites_coords, col="darkblue", pch=3)
+#levelplot(ras, main="Optimized Resistance",  margin=FALSE, at = breaks, col.regions = cols, ext=mywindow) + layer(sp.points(towhee_sites_coords, pch=3, cex=1, col="darkblue"))
 #dev.off()
