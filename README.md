@@ -1,5 +1,13 @@
-Highly contiguous genome assembly and conservation genomics of California Towhee *unsubmitted
+Conservation genomics of California towhee (Melozone crissalis) relative to the official list of endangered and threatened wildlife
 
 
-Andrew N. Black1,2, Safia Janjua1, Chris McCreedy3, Jong Yoon Jeon1, Erangi J Heenkenda1, Samarth Mathur4, Elise Ferree5, Amy L. Fesnock-Parker6, and J. Andrew DeWoody1
+Andrew N. Black, Jong Yoon Jeon, Chris McCreedy, Safia Janjua, Erangi J Heenkenda, Samarth Mathur, Elise Ferree, Amy L. Fesnock-Parker, Alvaro Hernandez, and J. Andrew DeWoody
+
+
+
+Directory structure corresponds to the subcategories listed in the manuscript, which is clarrified below:
+
+
+
+
 
