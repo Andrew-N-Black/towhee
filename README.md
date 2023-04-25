@@ -5,89 +5,92 @@ Andrew N. Black, Jong Yoon Jeon, Chris McCreedy, Safia Janjua, Erangi J Heenkend
 
 
 
-Scripts used in each subcategory listed in the manuscript, corresponds to the structure below:*
-
-*"Reference genome sequencing, assembly, and annotation"*
+Scripts used in each subcategory listed in the manuscript, corresponds to the structure below:
 
 
--assembly_safia.sh*
 
-*"Whole genome resequencing"*
-
-
--processing/ref_format.sh*
+**"Reference genome sequencing, assembly, and annotation"**
 
 
--processing/alignment.sh*
+-assembly_safia.sh
 
 
-*"Spatial patterns of gene flow"*
+**"Whole genome resequencing"**
 
 
--analyses/fst-sites.sh*
+-processing/ref_format.sh
 
 
--analyses/fst-sitesF.sh*
+-processing/alignment.sh
 
 
--analyses/fst-sitesM.sh*
+**"Spatial patterns of gene flow"**
 
 
--analyses/omni_config.ini*
+-analyses/fst-sites.sh
 
 
--analyses/towhee_omni.jl*
+-analyses/fst-sitesF.sh
 
 
--analyses/towhee_omni.sh*
+-analyses/fst-sitesM.sh
 
 
--analyses/towhee_rga.sh*
+-analyses/omni_config.ini
 
 
-*"Genomic diversity"*
+-analyses/towhee_omni.jl
 
 
--analyses/het.sh*
+-analyses/towhee_omni.sh
 
 
--analyses/ROH.sh*
+-analyses/towhee_rga.sh
 
 
-*"Population structure and differentiation"*
+**"Genomic diversity"**
 
 
--processing/beagle.sh*
+-analyses/het.sh
 
 
--analyses/pca.sh*
+-analyses/ROH.sh
 
 
--analyses/admixture.sh*
+**"Population structure and differentiation"**
 
 
--analyses/clumpp.sh*
+-processing/beagle.sh
 
 
--analyses/fst.sh*
+-analyses/pca.sh
 
 
--processing/cleaning_safia.sh*
+-analyses/admixture.sh
 
 
--analyses/bcfcall.sh*
+-analyses/clumpp.sh
 
 
--analyses/nu_tree.sh*
+-analyses/fst.sh
 
 
--analyses/mt_tree.sh*
+-processing/cleaning_safia.sh
 
 
-*"plotting / summary statistics"*
+-analyses/bcfcall.sh
 
 
--R/*.R*
+-analyses/nu_tree.sh
+
+
+-analyses/mt_tree.sh
+
+
+**"plotting / summary statistics"**
+
+
+-R/*.R
 
 
 
