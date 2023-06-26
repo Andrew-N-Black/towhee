@@ -23,6 +23,11 @@ W = 0.82069, p-value = 1.634e-08
 
 kruskal.test(Total ~ Pop, data = ind_roh)
 
+     CCAL    INYO    OREG   
+INYO 1.9e-07 -       -      
+OREG 1.5e-06 0.0556  -      
+SCAL 0.0066  1.9e-08 3.9e-09
+
 	Kruskal-Wallis rank sum test
 
 data:  Total by Pop
