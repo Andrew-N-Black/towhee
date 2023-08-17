@@ -297,3 +297,91 @@ module load angsd
 angsd -GL 1 -out inyo_ld -sites LD.sites -P 10 -bam inyo \
 -doGlf 2 -doMajorMinor 1 -doMaf 1   \
 -ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                   Create beagle file of filtered R2 for INYO population                                                             
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+source  /etc/bashrc
+module reset
+module --force purge
+module load anaconda/2020.11-py38
+conda activate ld
+ml gcc
+ml zlib
+ml gsl
+
+zcat inyo_ld.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > LDSites_inyo.txt
+sed 1d  LDSites_inyo.txt | wc -l
+#10723
+
+zcat inyo_ld.beagle.gz | cut -f 4- | gzip  > inyo_ld_format.beagle.gz
+
+~/ngsLD/ngsLD --geno inyo_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_inyo.ld --posH LDSites_inyo.txt --n_threads 20 --min_maf 0.05
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                   Create beagle file of filtered R2 for OREG population                                                             
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+source  /etc/bashrc
+module reset
+module --force purge
+module load anaconda/2020.11-py38
+conda activate ld
+ml gcc
+ml zlib
+ml gsl
+
+zcat oreg_ld.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > LDSites_oreg.txt
+sed 1d  LDSites_oreg.txt | wc -l
+#10723
+
+zcat oreg_ld.beagle.gz | cut -f 4- | gzip  > oreg_ld_format.beagle.gz
+
+~/ngsLD/ngsLD --geno oreg_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_oreg.ld --posH LDSites_oreg.txt --n_threads 20 --min_maf 0.05
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                   Create beagle file of filtered R2 for SCAL population                                                             
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+source  /etc/bashrc
+module reset
+module --force purge
+module load anaconda/2020.11-py38
+conda activate ld
+ml gcc
+ml zlib
+ml gsl
+
+zcat scal_ld.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > LDSites_scal.txt
+sed 1d  LDSites_scal.txt | wc -l
+#10723
+
+zcat scal_ld.beagle.gz | cut -f 4- | gzip  > scal_ld_format.beagle.gz
+
+~/ngsLD/ngsLD --geno scal_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_scal.ld --posH LDSites_scal.txt --n_threads 20 --min_maf 0.05
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+                   Create beagle file of filtered R2 for CCAL population                                                             
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+source  /etc/bashrc
+module reset
+module --force purge
+module load anaconda/2020.11-py38
+conda activate ld
+ml gcc
+ml zlib
+ml gsl
+
+zcat ccal_ld.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > LDSites_ccal.txt
+sed 1d  LDSites_ccal.txt | wc -l
+#10723
+
+zcat ccal_ld.beagle.gz | cut -f 4- | gzip  > ccal_ld_format.beagle.gz
+
+~/ngsLD/ngsLD --geno ccal_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_ccal.ld --posH LDSites_ccal.txt --n_threads 20 --min_maf 0.05
+
+
+
+
