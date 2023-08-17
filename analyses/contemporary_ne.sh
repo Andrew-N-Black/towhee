@@ -207,8 +207,10 @@ sed 1d scal.ld > scal.LD
  awk 'NR==FNR {a[$1]; next} $1 in a' sites.match1 sites.match2 > sites.match
 
 #Shared sites
- wc -l sites.match 
-#
+ wc -l sites.match* 
+  #10723 sites.match
+  #33912 sites.match1
+  #502457 sites.match2
 
 #Change delim and copy for new beagle file generation
  sed 's|:|\t|g' sites.match > LD.sites 
