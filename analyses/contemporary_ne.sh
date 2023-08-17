@@ -359,7 +359,7 @@ sed 1d  LDSites_scal.txt | wc -l
 
 zcat scal_ld.beagle.gz | cut -f 4- | gzip  > scal_ld_format.beagle.gz
 
-~/ngsLD/ngsLD --geno scal_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_scal.ld --posH LDSites_scal.txt --n_threads 20 --min_maf 0.05
+~/ngsLD/ngsLD --geno scal_ld_format.beagle.gz --probs --n_ind 23 --n_sites 10723 --outH filtered_scal.ld --posH LDSites_scal.txt --n_threads 20 --min_maf 0.05
 
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                    Create beagle file of filtered R2 for CCAL population                                                             
@@ -380,7 +380,7 @@ sed 1d  LDSites_ccal.txt | wc -l
 
 zcat ccal_ld.beagle.gz | cut -f 4- | gzip  > ccal_ld_format.beagle.gz
 
-~/ngsLD/ngsLD --geno ccal_ld_format.beagle.gz --probs --n_ind 14 --n_sites 10723 --outH filtered_ccal.ld --posH LDSites_ccal.txt --n_threads 20 --min_maf 0.05
+~/ngsLD/ngsLD --geno ccal_ld_format.beagle.gz --probs --n_ind 30 --n_sites 10723 --outH filtered_ccal.ld --posH LDSites_ccal.txt --n_threads 20 --min_maf 0.05
 
 
 
