@@ -8,7 +8,7 @@ het$Pop <- factor(het$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 ggplot(het,aes(x=Pop,y=HET,fill=Pop))+geom_boxplot(show.legend =FALSE)+xlab("")+ylab("Individual Heterozygosity")+theme_classic()+theme_classic()+scale_fill_manual(values=c("darkorchid","tan2","black","cadetblue"))+theme(legend.position="none")+ scale_fill_brewer(palette="Paired")
 ggsave("~/het_towhee.svg")
 #Color by region and order by site
-ggplot(het,aes(x=reorder(Sites,HET),y=HET,fill=Pop))+geom_boxplot(show.legend =TRUE)+xlab("")+ylab("Individual Heterozygosity")+theme_classic()+theme(axis.text.x=element_text(angle = 45, vjust = 0.8,hjust = 1))+ scale_fill_brewer(palette="Paired")
+ggplot(het,aes(x=reorder(Sites,HET),y=HET,fill=Pop))+geom_boxplot(show.legend =TRUE)+xlab("")+ylab("Individual Heterozygosity")+theme_classic()+theme(axis.text.x=element_text(angle = 45, vjust = 0.8,hjust = 1))+ scale_fill_brewer(palette="Paired")+theme(legend.title=element_blank())
 ggsave("~/het_site_towhee.svg")
 
 #Summarize by Population
