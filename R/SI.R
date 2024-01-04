@@ -74,7 +74,7 @@ axes<-eigen(cov)
 head(axes$values/sum(axes$values)*100)
 
 x<-cbind(PC1_3,sample_pop_sites)
-ggplot(data=x, aes(y=V2, x=V1,colour=Sites,shape=Pop))+geom_point(size=7)+ theme_classic() + xlab("PC1 (7.75%)") +ylab("PC2 (5.94%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+scale_shape_manual("Sites", values=c(4,20,10,23))+ scale_fill_brewer(palette="Paired")+theme(legend.title=element_blank())
+ggplot(data=x, aes(y=V2, x=V1,colour=Sites,shape=Pop))+geom_point(size=7)+ theme_classic() + xlab("PC1 (7.75%)") +ylab("PC2 (5.94%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+scale_shape_manual("Sites", values=c(4,20,10,23))+ scale_color_brewer(palette="Paired")+theme(legend.title=element_blank())
 ggsave("~/Figure_S6.svg")
 ggsave("~/Figure_S6.pdf")
 
