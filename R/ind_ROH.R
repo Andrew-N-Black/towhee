@@ -7,10 +7,9 @@ ind_roh<-as.data.frame(ind_roh)
 melt_data<-melt(ind_roh,id.vars = c("ID","Pop","Sites"))
 melt_data$Pop <- factor(melt_data$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 
-ggplot(melt_data, aes(fill=Pop, y=value, x=reorder(ID,value))) +geom_bar(stat="identity",position="dodge")+facet_grid(variable~Pop,scales = "free")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),axis.ticks.x=element_blank())+theme_classic()+
-    scale_fill_manual(values=c("darkorchid","tan2","black","cadetblue"))+ylab("fROH")+xlab("Sample (N=81)")+
-    theme(legend.position="none")+theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
-    
+ggplot(melt_data, aes(fill=Pop, y=value, x=reorder(ID,value))) +geom_bar(stat="identity",position="dodge")+facet_grid(variable~Pop,scales = "free")+theme(axis.title.x=element_blank(),axis.text.x=element_blank(),axis.ticks.x=element_blank())+theme_classic()+ylab("fROH")+xlab("Sample (N=81)")+
+    theme(legend.position="none")+theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())+ scale_fill_brewer(palette="Paired")
+
 ggsave("~/towhee_rohs.svg")
 
 shapiro.test(ind_roh$Total)
