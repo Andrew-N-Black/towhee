@@ -1,13 +1,7 @@
 library(reshape2)
 library(readxl)
 library(ggplot2)
-library(pophelper)
-
-
-library(reshape2)
-library(readxl)
-library(ggplot2)
-library(pophelper)
+library(RColorBrewer)
 
 
 
