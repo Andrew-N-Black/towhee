@@ -89,4 +89,18 @@ ggsave("~/phred_lepc.svg")
 ggsave("~/phred_lepc.pdf")
 
 
-       
+#Figure S12
+#PCA maf 0.10
+cov<-as.matrix(read.table("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/pca-towhee.maf.10.cov"))
+axes<-eigen(cov)
+head(axes$values/sum(axes$values)*100)
+[1] 8.037325 5.999671 4.231956 1.996710
+[5] 1.894460 1.609028
+
+
+PC1_3<-as.data.frame(axes$vectors[,1:3])
+title1<-"Population"
+title2<-"Site"
+
+ggplot(data=PC1_3, aes(y=V2, x=V1))+geom_point(size=7,pch=21,aes(fill=sample_pop_sites$Pop))+ theme_classic() + xlab("PC1 (8.04%)") +ylab("PC2 (5.99%)")+geom_hline(yintercept=0,linetype="dashed")+geom_vline(xintercept =0,linetype="dashed")+ scale_fill_brewer(palette="Paired")+theme(legend.title=element_blank())
+
