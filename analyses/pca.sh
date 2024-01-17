@@ -15,5 +15,7 @@ mkdir PCA
 angsd -GL 1 -out PCA/towhee -minQ 30 -P 64 \
 -minInd 64 -doGlf 2 -doMajorMinor 1 -doMaf 1 -SNP_pval 1e-6 -bam bamlist \
 -ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
-
+#maf 0.05
 pcangsd -b  PCA/towhee.beagle.gz --selection --minMaf 0.05 --sites_save --tree -o PCA/pca-towhee --threads 64 --pcadapt --admix
+#singletons
+pcangsd -b  PCA/towhee.beagle.gz --minMaf 0.0061 --sites_save -o PCA/pca-towhee_Singletons --threads 64 --admix
