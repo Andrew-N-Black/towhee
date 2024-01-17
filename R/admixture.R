@@ -24,4 +24,6 @@ plotQ(slist[1:3],returnplot=T,exportplot=T,imgoutput = "join",clustercol=c("#A6C
 setwd("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/")
 slist<-readQ(files =c("pop_K3-combined-mergedMAF.10.txt","pop_K4-combined-mergedMAF.10.txt","pop_K5-combined-mergedMAF.10.txt"))
 
+#Only singletons removed
+slist<-readQ(files =c("~/K_3_singleton.txt","~/K4_singletons.txt","~/K5_singletons.txt"))
 
