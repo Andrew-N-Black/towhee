@@ -5,29 +5,29 @@
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 #!/bin/sh -l
-#SBATCH -A fnrchook
+#SBATCH -A highmem
 #SBATCH -n 10
 #SBATCH -t 10-00:00:00
 #SBATCH --job-name=Beagle_LD
 #SBATCH --error=Beagle_LD.e
 #SBATCH --output=Beagle_LD.o
-#SBATCH --mem=50G
+#SBATCH --mem=100G
 module load biocontainers
 module load angsd
 
 #Move to bam folder
 cd /scratch/bell/blackan/TOWHEE/angsd_out
-angsd -GL 1 -out ccal -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
--minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam ccal \
+angsd -GL 1 -out ccal_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
+-minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam CCAL_bamlist_inter.txt  \
 -minHWEpval 0.05 -doHWE 1  \
--ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
+-ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
 
 
-zcat ccal.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_ccal.txt
-sed 1d  Sites_ccal.txt | wc -l
-#3747089
+zcat ccal_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_ccal_I.txt
+sed 1d  Sites_ccal_I.txt | wc -l
+#
 
-zcat ccal.beagle.gz | cut -f 4- | gzip  > ccal_format.beagle.gz
+zcat ccal_I.beagle.gz | cut -f 4- | gzip  > ccal_format_I.beagle.gz
 
 source  /etc/bashrc
 module reset
@@ -39,13 +39,16 @@ ml zlib
 ml gsl
 
 
-~/ngsLD/ngsLD --geno ccal_format.beagle.gz --probs --n_ind 30 --n_sites 3747089 --outH ccal.ld --posH Sites_ccal.txt --n_threads 20 --min_maf 0.05
-
 #Remove header, which format conflicts with next step
-sed 1d ccal.ld > ccal.LD
+sed 1d ccal_I.ld > ccal.LD
+
+~/ngsLD/ngsLD --geno ccal_format_I.beagle.gz --probs --n_ind 30 --n_sites 3747089 --outH ccal.ld --posH Sites_ccal_I.txt --n_threads 20 --min_maf 0.05
 
 #Remove physically linked sites, after removing header in north.ld file
- ~/prune_graph/target/release/prune_graph --in ccal.LD --weight-field column_7 --weight-filter "column_3 <= 50000 && column_7 >= 0.5" --out ccalLD_unlinked.pos
+ ~/prune_graph/target/release/prune_graph --in ccal.LD --weight-filter "column_3 <= 100000" --out ccalLD_unlinked_I.pos
+ 
+
+
 
 
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
@@ -53,9 +56,9 @@ sed 1d ccal.ld > ccal.LD
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
 #!/bin/sh -l
-#SBATCH -A fnrchook
+#SBATCH -A highmem
 #SBATCH -n 10
-#SBATCH -t 10-00:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH --job-name=Beagle_inyo
 #SBATCH --error=Beagle_in.e
 #SBATCH --output=Beagle_in.o
@@ -65,17 +68,17 @@ module load angsd
 
 #Move to bam folder
 cd /scratch/bell/blackan/TOWHEE/angsd_out
-angsd -GL 1 -out inyo -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
--minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam inyo \
+angsd -GL 1 -out inyo_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
+-minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam INYO_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
--ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
+-ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
 
 
-zcat inyo.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_inyo.txt
-sed 1d  Sites_inyo.txt | wc -l
+zcat inyo_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_inyo_I.txt
+sed 1d  Sites_inyo_I.txt | wc -l
 #2861526
 
-zcat inyo.beagle.gz | cut -f 4- | gzip  > inyo_format.beagle.gz
+zcat inyo_I.beagle.gz | cut -f 4- | gzip  > inyo_I_format.beagle.gz
 
 
 
@@ -101,9 +104,9 @@ sed 1d inyo.ld > inyo.LD
                    Submit job to create filtered beagle file for OREG population                                                             
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 #!/bin/sh -l
-#SBATCH -A fnrchook
+#SBATCH -A highmem
 #SBATCH -n 10
-#SBATCH -t 10-00:00:00
+#SBATCH -t 1-00:00:00
 #SBATCH --job-name=Beagle_OR
 #SBATCH --error=Beagle_OR.e
 #SBATCH --output=Beagle_OR.o
@@ -114,16 +117,16 @@ module load angsd
 #Move to bam folder
 cd /scratch/bell/blackan/TOWHEE/angsd_out
 angsd -GL 1 -out oregon -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
--minInd 10 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam oreg \
+-minInd 10 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam OREG_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
--ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
+-ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
 
 
-zcat oregon.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_oreg.txt
-sed 1d  Sites_oreg.txt | wc -l
+zcat oregon_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_oreg_I.txt
+sed 1d  Sites_oreg_I.txt | wc -l
 #2483151
 
-zcat oregon.beagle.gz | cut -f 4- | gzip  > oregon_format.beagle.gz
+zcat oregon_I.beagle.gz | cut -f 4- | gzip  > oregon_I_format.beagle.gz
 
 
 
@@ -159,10 +162,10 @@ module load angsd
 
 #Move to bam folder
 cd /scratch/bell/blackan/TOWHEE/angsd_out
-angsd -GL 1 -out scal -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
--minInd 15 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam scal \
+angsd -GL 1 -out scal_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
+-minInd 15 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam SCAL_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
--ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
+-ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
 
 
 zcat scal.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_scal.txt
