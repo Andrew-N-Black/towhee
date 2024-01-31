@@ -16,18 +16,11 @@ module load biocontainers
 module load angsd
 
 #Move to bam folder
-cd /scratch/bell/blackan/TOWHEE/angsd_out
 angsd -GL 1 -out ccal_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
 -minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam CCAL_bamlist_inter.txt  \
 -minHWEpval 0.05 -doHWE 1  \
 -ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
 
-
-zcat ccal_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_ccal_I.txt
-sed 1d  Sites_ccal_I.txt | wc -l
-#
-
-zcat ccal_I.beagle.gz | cut -f 4- | gzip  > ccal_format_I.beagle.gz
 
 source  /etc/bashrc
 module reset
@@ -38,16 +31,11 @@ ml gcc
 ml zlib
 ml gsl
 
-
-#Remove header, which format conflicts with next step
-sed 1d ccal_I.ld > ccal.LD
-
-~/ngsLD/ngsLD --geno ccal_format_I.beagle.gz --probs --n_ind 30 --n_sites 3747089 --outH ccal.ld --posH Sites_ccal_I.txt --n_threads 20 --min_maf 0.05
-
-#Remove physically linked sites, after removing header in north.ld file
- ~/prune_graph/target/release/prune_graph --in ccal.LD --weight-filter "column_3 <= 100000" --out ccalLD_unlinked_I.pos
+zcat ccal_I.beagle.gz | awk 'NR % 1000 == 0' | cut -f 4- | gzip > ccal_subset1k.beagle.gz
+zcat ccal_I.mafs.gz | cut -f 1,2 |  awk 'NR % 1000 == 0' | sed 's/:/_/g'| gzip > ccal_pos.gz
  
-
+ 
+~/ngsLD/ngsLD --geno ccal_subset1k.beagle.gz --probs --n_ind 30 --n_sites 3747 --outH ccal_I.ld --pos ccal_pos.gz --n_threads 20 --min_maf 0.05  --max_kb_dist 0
 
 
 
@@ -66,20 +54,10 @@ sed 1d ccal_I.ld > ccal.LD
 module load biocontainers
 module load angsd
 
-#Move to bam folder
-cd /scratch/bell/blackan/TOWHEE/angsd_out
 angsd -GL 1 -out inyo_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
 -minInd 9 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam INYO_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
 -ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
-
-
-zcat inyo_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_inyo_I.txt
-sed 1d  Sites_inyo_I.txt | wc -l
-#2861526
-
-zcat inyo_I.beagle.gz | cut -f 4- | gzip  > inyo_I_format.beagle.gz
-
 
 
 source  /etc/bashrc 
@@ -91,14 +69,11 @@ ml gcc
 ml zlib
 ml gsl
 
-
-~/ngsLD/ngsLD --geno inyo_format.beagle.gz --probs --n_ind 14 --n_sites 2861526 --outH inyo.ld --posH Sites_inyo.txt --n_threads 20 --min_maf 0.05 
-
-#Remove header
-sed 1d inyo.ld > inyo.LD
-#Remove physically linked sites, after removing header in north.ld file
- ~/prune_graph/target/release/prune_graph --in inyo.LD --weight-field column_7 --weight-filter "column_3 <= 50000 && column_7 >= 0.5" --out northLD_unlinked.pos
-
+zcat inyo_I.beagle.gz | awk 'NR % 1000 == 0' | cut -f 4- | gzip > inyo_subset1k.beagle.gz
+zcat inyo_I.mafs.gz | cut -f 1,2 |  awk 'NR % 1000 == 0' | sed 's/:/_/g'| gzip > inyo_pos.gz
+ 
+ 
+~/ngsLD/ngsLD --geno inyo_subset1k.beagle.gz --probs --n_ind 14 --n_sites 2861 --outH inyo_I.ld --pos inyo_pos.gz --n_threads 20 --min_maf 0.05  --max_kb_dist 0
 
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                    Submit job to create filtered beagle file for OREG population                                                             
@@ -110,25 +85,15 @@ sed 1d inyo.ld > inyo.LD
 #SBATCH --job-name=Beagle_OR
 #SBATCH --error=Beagle_OR.e
 #SBATCH --output=Beagle_OR.o
-#SBATCH --mem=50G
+#SBATCH --mem=100G
 module load biocontainers
 module load angsd
 
 #Move to bam folder
-cd /scratch/bell/blackan/TOWHEE/angsd_out
-angsd -GL 1 -out oregon -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
+angsd -GL 1 -out oregon_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
 -minInd 10 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam OREG_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
 -ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
-
-
-zcat oregon_I.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_oreg_I.txt
-sed 1d  Sites_oreg_I.txt | wc -l
-#2483151
-
-zcat oregon_I.beagle.gz | cut -f 4- | gzip  > oregon_I_format.beagle.gz
-
-
 
 source  /etc/bashrc
 module reset
@@ -139,42 +104,32 @@ ml gcc
 ml zlib
 ml gsl
 
-
-~/ngsLD/ngsLD --geno oregon_format.beagle.gz --probs --n_ind 14 --n_sites 2483151 --outH oreg.ld --posH Sites_inyo.txt --n_threads 20 --min_maf 0.05
-
-#Remove physically linked sites, after removing header in north.ld file
- ~/prune_graph/target/release/prune_graph --in oreg.LD --weight-field column_7 --weight-filter "column_3 <= 50000 && column_7 >= 0.5" --out oregonLD_unlinked.pos
+zcat oregon_I.beagle.gz | awk 'NR % 1000 == 0' | cut -f 4- | gzip > oreg_subset1k.beagle.gz
+zcat oregon_I.mafs.gz | cut -f 1,2 |  awk 'NR % 1000 == 0' | sed 's/:/_/g'| gzip > oreg_pos.gz
+ 
+ 
+~/ngsLD/ngsLD --geno oreg_subset1k.beagle.gz --probs --n_ind 14 --n_sites 2483 --outH oreg_I.ld --pos oreg_pos.gz --n_threads 20 --min_maf 0.05  --max_kb_dist 0
 
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
                    Submit job to create filtered beagle file for SCAL population                                                             
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 
-#!/bin/sh -l
-#SBATCH -A fnrchook
+#!/bin/bash
+#SBATCH -A highmem
 #SBATCH -n 10
 #SBATCH -t 10-00:00:00
 #SBATCH --job-name=Beagle_OR
 #SBATCH --error=Beagle_OR.e
 #SBATCH --output=Beagle_OR.o
-#SBATCH --mem=50G
+#SBATCH --mem=100G
 module load biocontainers
 module load angsd
 
 #Move to bam folder
-cd /scratch/bell/blackan/TOWHEE/angsd_out
 angsd -GL 1 -out scal_I -minQ 30 -P 10 -doDepth 1 -doCounts 1 -setMinDepthInd 3 \
 -minInd 15 -doGlf 2 -doMajorMinor 1 -doMaf 1 -minMaf 0.05 -skipTriallelic 1 -SNP_pval 1e-6 -bam SCAL_bamlist_inter.txt \
 -minHWEpval 0.05 -doHWE 1  \
 -ref /scratch/bell/blackan/TOWHEE/analysis/ref/NCBI/ref.fa
-
-
-zcat scal.beagle.gz | cut -f 1 | sed 's/NW_/NW./g' | tr "_" "\t" | sed 's/NW./NW_/g' > Sites_scal.txt
-sed 1d  Sites_scal.txt | wc -l
-#4185182
-
-zcat scal.beagle.gz | cut -f 4- | gzip  > scal_format.beagle.gz
-
-
 
 source  /etc/bashrc
 module reset
@@ -186,14 +141,11 @@ ml zlib
 ml gsl
 
 
-~/ngsLD/ngsLD --geno scal_format.beagle.gz --probs --n_ind 23 --n_sites 4185182 --outH scal.ld --posH Sites_scal.txt --n_threads 20 --min_maf 0.05
-
-#Remove header
-sed 1d scal.ld > scal.LD
-
-#Remove physically linked sites, after removing header in north.ld file
- ~/prune_graph/target/release/prune_graph --in scal.LD --weight-field column_7 --weight-filter "column_3 <= 50000 && column_7 >= 0.5" --out scalLD_unlinked.pos
-
+zcat scal_I.beagle.gz | awk 'NR % 1000 == 0' | cut -f 4- | gzip > scal_subset1k.beagle.gz
+zcat scal_I.mafs.gz | cut -f 1,2 |  awk 'NR % 1000 == 0' | sed 's/:/_/g'| gzip > scal_pos.gz
+ 
+ 
+~/ngsLD/ngsLD --geno scal_subset1k.beagle.gz --probs --n_ind 21 --n_sites 4306 --outH scal_I.ld --pos scal_pos.gz --n_threads 20 --min_maf 0.05  --max_kb_dist 0
 
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
