@@ -7,6 +7,19 @@ ggplot(heterozygosity_passeriformes,aes(x=reorder(USFWS,H),y=H))+geom_boxplot()+
 heterozygosity_passeriformes <- read_excel("heterozygosity_passeriformes.xlsx")
 ggplot(heterozygosity_passeriformes,aes(x=reorder(IUCN_long,H),y=H))+geom_boxplot()+theme_bw() + labs(x = "", y = "Heterozygosity")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("IUCN category") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
 +     axis.title.y = element_text(size = 20))
+heterozygosity_passeriformes[, as.list(summary(H)), by = IUCN_long]
+               IUCN_long        Min.     1st Qu.      Median         Mean     3rd Qu.        Max.
+                  <char>       <num>       <num>       <num>        <num>       <num>       <num>
+1:         Least_Concern 0.001663000 0.003224500 0.005205200 0.0312419158 0.045700000 0.175070000
+2:       Near_Threatened 0.001000000 0.001800000 0.002600000 0.0025525429 0.003233900 0.004200000
+3: Critically_Endangered 0.000500000 0.004600000 0.004600000 0.0042666667 0.004625000 0.004700000
+4:            Vulnerable 0.000200000 0.000850000 0.001300000 0.0027666667 0.002350000 0.010400000
+5:            Endangered 0.000500000 0.000550000 0.000600000 0.0009666667 0.001200000 0.001800000
+6:                  OREG 0.001593591 0.001648875 0.001707078 0.0016940771 0.001735707 0.001801201
+7:                  SCAL 0.002340241 0.002424306 0.002470170 0.0024616562 0.002496708 0.002554755
+8:                  CCAL 0.001675416 0.001984805 0.002025949 0.0020108766 0.002058755 0.002337212
+9:                  INYO 0.001262391 0.001744430 0.001853835 0.0017970595 0.001885623 0.002069989
+
 
 #Plot total fROH only for US species, according to USFWS status
 passerine_roh_usfws <- read_excel("passerine_roh_usfws.xlsx")
