@@ -58,5 +58,15 @@ data_summary <- function(data, varname, groupnames){
     return(data_sum)
 }
 
-df2 <- data_summary(heterozygosity_passeriformes_USFWS_mean, varname="H",groupnames="species")
+df2 <- data_summary(test, varname="H",groupnames=c("Organism","IUCN"))
+df2$IUCN=as.factor(df2$IUCN)
+df2$Organism=as.factor(df2$Organism)
 
+ggplot(df2, aes(y=H, x=reorder(Organism,H))) + geom_point()+coord_flip()+theme_bw()
+
+
+ggplot(df2, aes(y=H, x=reorder(Organism,H),color=IUCN)) + 
+    geom_line() +
+    geom_point(size=3)+
+    geom_errorbar(aes(ymin=H-sd, ymax=H+sd), width=.2,
+                  position=position_dodge(0.05))+coord_flip()+theme_classic()
