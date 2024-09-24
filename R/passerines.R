@@ -70,3 +70,6 @@ ggplot(df2, aes(y=H, x=reorder(Organism,H),color=IUCN)) +
     geom_point(size=3)+
     geom_errorbar(aes(ymin=H-sd, ymax=H+sd), width=.2,
                   position=position_dodge(0.05))+coord_flip()+theme_classic()
+
+#By binary (plus towhee) categories
+ggplot(test, aes(y=H, x=reorder(USFWS,H))) + geom_boxplot(outlier.shape=16,outlier.size=2, notch=FALSE)+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")
