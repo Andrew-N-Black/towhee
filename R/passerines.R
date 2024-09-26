@@ -1,3 +1,67 @@
+#Heterozygosity
+SONG_BIRDS_het <- read_excel("SONG_BIRDS-het.xlsx")
+summary(SONG_BIRDS_het$H)
+#Min.   1st Qu.    Median      Mean   3rd Qu. 
+#0.0001842 0.0020880 0.0041884 0.0056234 0.0065415 
+#Max. 
+
+
+sd(SONG_BIRDS_het$H)
+#0.01073856
+0.0056234+2*0.01073856
+
+ggplot(SONG_BIRDS_het, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+ylim(c(0,0.01))+geom_hline(yintercept = 0.0017970595)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylim(c(0,0.02710052))
+
+#Short ROHs
+SONG_BIRDS_short <- read_excel("SONG_BIRDS-short.xlsx")
+sd(SONG_BIRDS_long$F100)
+#[1] 0.06710144
+summary(SONG_BIRDS_long$F100)
+#Min.   1st Qu.    Median      Mean   3rd Qu. 
+#0.0000000 0.0007426 0.0104983 0.0405051 0.0650950 
+#Max. 
+#0.6300000 
+0.0405051+2*0.06710144
+# 0.174708
+
+
+ggplot(SONG_BIRDS_short, aes(y=F100, x=reorder(SHORT,F100))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.139112226)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+ylim(c(0,0.174708))
+
+#Long ROHs
+
+sd(SONG_BIRDS_long$F1MB)
+#[1] 0.04074927
+0.01102+2*0.04074927
+#[1] 0.09251854
+ggplot(SONG_BIRDS_long, aes(y=F1MB, x=reorder(SHORT,F1MB))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.04759638)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Long ROHs")+ylim(c(0,0.0925))
+ggsave("~/long.svg")
+
+
+
+
+#TOTAL FROH
+SONG_BIRDS_total <- read_excel("SONG_BIRDS-total.xlsx")
+summary(SONG_BIRDS_total$Ftotal)
+#Min.   1st Qu.    Median      Mean   3rd Qu. 
+#0.0000000 0.0007539 0.0108521 0.0463662 0.0860619 
+#Max. 
+#0.4227269 
+sd(SONG_BIRDS_total$Ftotal)
+#[1] 0.06831264
+0.0463662+2*0.06831264
+0.1829915
+ggplot(SONG_BIRDS_total, aes(y=Ftotal, x=reorder(SHORT,Ftotal))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.182110811)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Total ROHs")+ylim(c(0,0.1829915))
+ggsave("~/total.svg")
+
+
+
+
+0.182110811 #INYO MEAN
+
+
+
+
+
 #Plot US species heterozygosity according to USFWS listing status
 heterozygosity_passeriformes <- read_excel("heterozygosity_passeriformes_USFWS.xlsx")
 ggplot(heterozygosity_passeriformes,aes(x=reorder(USFWS,H),y=H))+geom_boxplot()+theme_bw() + labs(x = "", y = "Heterozygosity")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("USFWS listing") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
