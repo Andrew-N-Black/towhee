@@ -12,45 +12,79 @@ sd(SONG_BIRDS_het$H)
 
 ggplot(SONG_BIRDS_het, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+ylim(c(0,0.01))+geom_hline(yintercept = 0.0017970595)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylim(c(0,0.02710052))
 
-#Short ROHs
-SONG_BIRDS_short <- read_excel("SONG_BIRDS-short.xlsx")
-sd(SONG_BIRDS_long$F100)
-#[1] 0.06710144
-summary(SONG_BIRDS_long$F100)
-#Min.   1st Qu.    Median      Mean   3rd Qu. 
-#0.0000000 0.0007426 0.0104983 0.0405051 0.0650950 
-#Max. 
-#0.6300000 
-0.0405051+2*0.06710144
-# 0.174708
+
+SONG_BIRDS_het$SHORT=as.factor(SONG_BIRDS_het$SHORT)
+CCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "CCAL", ]
+Delisted<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Delisted", ]
+INYO<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "INYO", ]
+Not_Threatened<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Not Threatened", ]
+OREG<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "OREG", ]
+SCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "SCAL", ]
+Threatened<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Threatened", ]
 
 
-ggplot(SONG_BIRDS_short, aes(y=F100, x=reorder(SHORT,F100))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.139112226)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+ylim(c(0,0.174708))
+##SHORT ROH
 
-#Long ROHs
+SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
 
-sd(SONG_BIRDS_long$F1MB)
-#[1] 0.04074927
-0.01102+2*0.04074927
-#[1] 0.09251854
-ggplot(SONG_BIRDS_long, aes(y=F1MB, x=reorder(SHORT,F1MB))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.04759638)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Long ROHs")+ylim(c(0,0.0925))
-ggsave("~/long.svg")
+SONG_BIRDS_long_filt$SHORT=as.factor(SONG_BIRDS_long_filt$SHORT)
+
+
+mean(SONG_BIRDS_long_filt$F100)
+0.04718723
+sd(SONG_BIRDS_long_filt$F100)
+0.07093977
+0.04718723+2*0.07093977
+0.1890668
+
+ggplot(SONG_BIRDS_long_filt, aes(y=F100, x=reorder(SHORT,F100))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.139112226)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+ylim(c(0,0.1890668))
+ggsave("~/short-filt.svg")
+
+levels(SONG_BIRDS_long_filt$SHORT)
+[1] "CCAL"           "Delisted"       "INYO"          
+[4] "Not Threatened" "OREG"           "SCAL"          
+[7] "Threatened"
+
+CCAL<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "CCAL", ]
+Delisted<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Delisted", ]
+INYO<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "INYO", ]
+Not_Threatened<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Not Threatened", ]
+OREG<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "OREG", ]
+SCAL<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "SCAL", ]
+Threatened<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Threatened", ]
+
+
+wilcox.test(INYO$Ftotal,Not_Threatened$Ftotal)
+
+
+##LONG ROH
+SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
+
+sd(SONG_BIRDS_long_filt$F1MB)
+#[1] 0.04583629
+
+mean(SONG_BIRDS_long_filt$F1MB)
+0.01396362
+
+0.01396362+2*0.04583629
+ggplot(SONG_BIRDS_long_filt, aes(y=F1MB, x=reorder(SHORT,F1MB))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.04759638)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Long ROHs")+ylim(c(0,0.1056362))
+ggsave("~/long-filt.svg")
 
 
 
 
 #TOTAL FROH
-SONG_BIRDS_total <- read_excel("SONG_BIRDS-total.xlsx")
-summary(SONG_BIRDS_total$Ftotal)
-#Min.   1st Qu.    Median      Mean   3rd Qu. 
-#0.0000000 0.0007539 0.0108521 0.0463662 0.0860619 
-#Max. 
-#0.4227269 
-sd(SONG_BIRDS_total$Ftotal)
-#[1] 0.06831264
-0.0463662+2*0.06831264
-0.1829915
-ggplot(SONG_BIRDS_total, aes(y=Ftotal, x=reorder(SHORT,Ftotal))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.182110811)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Total ROHs")+ylim(c(0,0.1829915))
+SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
+
+mean(SONG_BIRDS_long_filt$Ftotal)
+ #0.06115085
+sd(SONG_BIRDS_long_filt$Ftotal)
+ #0.11169
+0.06115085+2*0.11169
+#[1] 0.2845309
+
+
+ggplot(SONG_BIRDS_long_filt, aes(y=Ftotal, x=reorder(SHORT,Ftotal))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.182110811)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Total ROHs")+ylim(c(0,0.2845309))
 ggsave("~/total.svg")
 
 
