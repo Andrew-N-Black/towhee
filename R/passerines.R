@@ -1,17 +1,9 @@
 #Heterozygosity
-SONG_BIRDS_het <- read_excel("SONG_BIRDS-het.xlsx")
-summary(SONG_BIRDS_het$H)
-#Min.   1st Qu.    Median      Mean   3rd Qu. 
-#0.0001842 0.0020880 0.0041884 0.0056234 0.0065415 
-#Max. 
+SONG_BIRDS_het <- read_excel("SONG_BIRDS.xlsx")
+SONG_BIRDS_het$SHORT=as.factor(SONG_BIRDS_het$SHORT)
 
-
-sd(SONG_BIRDS_het$H)
-#0.01073856
-0.0056234+2*0.01073856
-
-ggplot(SONG_BIRDS_het, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+ylim(c(0,0.01))+geom_hline(yintercept = 0.0017970595)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylim(c(0,0.02710052))
-
+ggplot(SONG_BIRDS_het, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.2,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
+    scale_color_manual(values = c("#1F78B4","grey","#B2DF8A","grey","#A6CEE3","#33A02C","grey"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595)
 
 SONG_BIRDS_het$SHORT=as.factor(SONG_BIRDS_het$SHORT)
 CCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "CCAL", ]
@@ -33,8 +25,8 @@ roh<-melt(SONG_BIRDS_roh, id.vars = c("SHORT","Organism","N50"))
 roh$SHORT=as.factor(roh$SHORT)
 mean(roh$value)+2*sd(roh$value)
 #[1] 0.1241392
-ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.2,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+facet_grid(rows=vars(variable),scales="free_y")+
-    scale_color_manual(values = c("grey","grey","grey","grey","blue","red","green"))+ theme(legend.position="none")
+ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.2,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+facet_grid(rows=vars(variable),scales="free_y")+
+    scale_color_manual(values = c("#1F78B4","grey","#B2DF8A","grey","#A6CEE3","#33A02C","grey"))+ theme(legend.position="none")
 
 
 
