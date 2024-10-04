@@ -23,7 +23,27 @@ SCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "SCAL", ]
 Threatened<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Threatened", ]
 
 
-##SHORT ROH
+## ROH
+
+library(readxl)
+library(reshape2)
+library(ggplot2)
+SONG_BIRDS_roh <- read_excel("SONG_BIRDS-roh.xlsx")
+roh<-melt(SONG_BIRDS_roh, id.vars = c("SHORT","Organism","N50"))
+roh$SHORT=as.factor(roh$SHORT)
+mean(roh$value)+2*sd(roh$value)
+#[1] 0.1241392
+ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.2,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+facet_grid(rows=vars(variable),scales="free_y")+
+    scale_color_manual(values = c("grey","grey","grey","grey","blue","red","green"))+ theme(legend.position="none")
+
+
+
+
+
+
+
+
+
 
 SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
 
