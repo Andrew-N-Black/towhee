@@ -30,156 +30,104 @@ ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT
 
 
 
+##Statistics:
+#Individual heterozygosity (H) according to IUCN category (SHROT)
+kruskal.test(H ~ SHORT, data = SONG_BIRDS_het)
+
+	Kruskal-Wallis rank sum test
+
+data:  H by SHORT
+Kruskal-Wallis chi-squared = 181.16, df = 6, p-value < 2.2e-16
+
+
+pairwise.wilcox.test(SONG_BIRDS_het$H, SONG_BIRDS_het$SHORT,
++                      p.adjust.method = "BH")
+
+	Pairwise comparisons using Wilcoxon rank sum exact test 
+
+data:  SONG_BIRDS_het$H and SONG_BIRDS_het$SHORT 
+
+               CCAL    Delisted INYO    Not Threatened OREG    SCAL   
+Delisted       0.00065 -        -       -              -       -      
+INYO           0.00019 0.00386  -       -              -       -      
+Not Threatened 3.9e-14 0.36646  1.2e-08 -              -       -      
+OREG           1.1e-08 0.00386  0.00606 9.4e-09        -       -      
+SCAL           4.0e-14 0.00115  1.4e-09 1.6e-08        1.4e-09 -      
+Threatened     0.01641 0.03173  0.00011 1.1e-14        7.8e-06 0.11995
+
+P value adjustment method: BH 
+
+
+#Ancestral fROH by IUCN category
+kruskal.test(F100 ~ SHORT, data = SONG_BIRDS_roh)
+
+Kruskal-Wallis chi-squared = 148.95, df = 6, p-value < 2.2e-16
+
+pairwise.wilcox.test(SONG_BIRDS_roh$F100, SONG_BIRDS_roh$SHORT,
++                      p.adjust.method = "bonf")
+
+	Pairwise comparisons using Wilcoxon rank sum exact test 
+
+data:  SONG_BIRDS_roh$F100 and SONG_BIRDS_roh$SHORT 
+
+               CCAL    Delisted INYO    Not Threatened OREG    SCAL   
+Delisted       1.00000 -        -       -              -       -      
+INYO           4.4e-07 0.06176  -       -              -       -      
+Not Threatened 2.7e-12 0.59916  1.6e-08 -              -       -      
+OREG           2.5e-07 0.06176  1.00000 1.4e-08        -       -      
+SCAL           0.09673 1.00000  6.9e-09 1.8e-07        6.9e-09 -      
+Threatened     1.00000 1.00000  0.00021 3.4e-10        1.0e-04 1.00000
+
+P value adjustment method: bonferroni 
+
+	Pairwise comparisons using Wilcoxon rank sum exact test 
+
+#Recent fROH by IUCN category
+kruskal.test(F1MB ~ SHORT, data = SONG_BIRDS_roh)
+	Kruskal-Wallis rank sum test
+
+data:  F1MB by SHORT
+Kruskal-Wallis chi-squared = 161.44, df = 6, p-value < 2.2e-16
+
+
+pairwise.wilcox.test(SONG_BIRDS_roh$F1MB, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf")
+
+	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
+
+data:  SONG_BIRDS_roh$F1MB and SONG_BIRDS_roh$SHORT 
+
+               CCAL    Delisted INYO    Not Threatened OREG    SCAL   
+Delisted       0.11174 -        -       -              -       -      
+INYO           0.00605 0.20489  -       -              -       -      
+Not Threatened < 2e-16 1.00000  3.2e-12 -              -       -      
+OREG           1.00000 0.20489  0.00020 5.6e-11        -       -      
+SCAL           0.36476 0.51665  0.00018 1.6e-14        1.00000 -      
+Threatened     2.3e-05 1.00000  8.5e-07 6.2e-09        0.03806 0.07464
+
+
+
+#fTOTAL by IUCN category (SHORT)
+
+kruskal.test(Ftotal ~ SHORT, data = SONG_BIRDS_roh)
+
+	Kruskal-Wallis rank sum test
+
+data:  Ftotal by SHORT
+Kruskal-Wallis chi-squared = 149.02, df = 6, p-value < 2.2e-16
+
+
+data:  SONG_BIRDS_roh$Ftotal and SONG_BIRDS_roh$SHORT 
+
+               CCAL    Delisted INYO    Not Threatened OREG    SCAL   
+Delisted       0.94685 -        -       -              -       -      
+INYO           2.0e-06 0.06176  -       -              -       -      
+Not Threatened 9.2e-13 0.78668  2.8e-08 -              -       -      
+OREG           2.1e-05 0.06176  1.00000 3.4e-08        -       -      
+SCAL           0.11558 1.00000  1.3e-07 5.7e-08        1.4e-08 -      
+Threatened     1.00000 1.00000  2.0e-05 1.2e-09        0.00016 1.00000
+
+P value adjustment method: bonferroni 
 
 
 
 
-
-
-
-SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
-
-SONG_BIRDS_long_filt$SHORT=as.factor(SONG_BIRDS_long_filt$SHORT)
-
-
-mean(SONG_BIRDS_long_filt$F100)
-0.04718723
-sd(SONG_BIRDS_long_filt$F100)
-0.07093977
-0.04718723+2*0.07093977
-0.1890668
-
-ggplot(SONG_BIRDS_long_filt, aes(y=F100, x=reorder(SHORT,F100))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.139112226)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Short ROHs")+ylim(c(0,0.1890668))
-ggsave("~/short-filt.svg")
-
-levels(SONG_BIRDS_long_filt$SHORT)
-[1] "CCAL"           "Delisted"       "INYO"          
-[4] "Not Threatened" "OREG"           "SCAL"          
-[7] "Threatened"
-
-CCAL<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "CCAL", ]
-Delisted<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Delisted", ]
-INYO<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "INYO", ]
-Not_Threatened<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Not Threatened", ]
-OREG<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "OREG", ]
-SCAL<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "SCAL", ]
-Threatened<-SONG_BIRDS_long_filt[ SONG_BIRDS_long_filt$SHORT == "Threatened", ]
-
-
-wilcox.test(INYO$Ftotal,Not_Threatened$Ftotal)
-
-
-##LONG ROH
-SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
-
-sd(SONG_BIRDS_long_filt$F1MB)
-#[1] 0.04583629
-
-mean(SONG_BIRDS_long_filt$F1MB)
-0.01396362
-
-0.01396362+2*0.04583629
-ggplot(SONG_BIRDS_long_filt, aes(y=F1MB, x=reorder(SHORT,F1MB))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.04759638)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Long ROHs")+ylim(c(0,0.1056362))
-ggsave("~/long-filt.svg")
-
-
-
-
-#TOTAL FROH
-SONG_BIRDS_long_filt <- read_excel("SONG_BIRDS-long-filt.xlsx")
-
-mean(SONG_BIRDS_long_filt$Ftotal)
- #0.06115085
-sd(SONG_BIRDS_long_filt$Ftotal)
- #0.11169
-0.06115085+2*0.11169
-#[1] 0.2845309
-
-
-ggplot(SONG_BIRDS_long_filt, aes(y=Ftotal, x=reorder(SHORT,Ftotal))) + geom_boxplot(outlier.colour = "grey")+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")+geom_hline(yintercept = 0.182110811)+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("Total ROHs")+ylim(c(0,0.2845309))
-ggsave("~/total.svg")
-
-
-
-
-0.182110811 #INYO MEAN
-
-
-
-
-
-#Plot US species heterozygosity according to USFWS listing status
-heterozygosity_passeriformes <- read_excel("heterozygosity_passeriformes_USFWS.xlsx")
-ggplot(heterozygosity_passeriformes,aes(x=reorder(USFWS,H),y=H))+geom_boxplot()+theme_bw() + labs(x = "", y = "Heterozygosity")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("USFWS listing") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-    axis.title.y = element_text(size = 20))
-
-#Plot all passerine species and towhee according to IUCN classification
-heterozygosity_passeriformes <- read_excel("heterozygosity_passeriformes.xlsx")
-ggplot(heterozygosity_passeriformes,aes(x=reorder(IUCN_long,H),y=H))+geom_boxplot()+theme_bw() + labs(x = "", y = "Heterozygosity")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("IUCN category") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-+     axis.title.y = element_text(size = 20))
-heterozygosity_passeriformes[, as.list(summary(H)), by = IUCN_long]
-               IUCN_long        Min.     1st Qu.      Median         Mean     3rd Qu.        Max.
-                  <char>       <num>       <num>       <num>        <num>       <num>       <num>
-1:         Least_Concern 0.001663000 0.003224500 0.005205200 0.0312419158 0.045700000 0.175070000
-2:       Near_Threatened 0.001000000 0.001800000 0.002600000 0.0025525429 0.003233900 0.004200000
-3: Critically_Endangered 0.000500000 0.004600000 0.004600000 0.0042666667 0.004625000 0.004700000
-4:            Vulnerable 0.000200000 0.000850000 0.001300000 0.0027666667 0.002350000 0.010400000
-5:            Endangered 0.000500000 0.000550000 0.000600000 0.0009666667 0.001200000 0.001800000
-6:                  OREG 0.001593591 0.001648875 0.001707078 0.0016940771 0.001735707 0.001801201
-7:                  SCAL 0.002340241 0.002424306 0.002470170 0.0024616562 0.002496708 0.002554755
-8:                  CCAL 0.001675416 0.001984805 0.002025949 0.0020108766 0.002058755 0.002337212
-9:                  INYO 0.001262391 0.001744430 0.001853835 0.0017970595 0.001885623 0.002069989
-
-
-#Plot total fROH only for US species, according to USFWS status
-passerine_roh_usfws <- read_excel("passerine_roh_usfws.xlsx")
-ggplot(passerine_roh_usfws,aes(x=reorder(USFWS,`Total Froh`),y=`Total Froh`))+geom_boxplot()+theme_bw() + labs(x = "", y = "Total fROH")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("USFWS Status") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-+     axis.title.y = element_text(size = 20))
-
-#Plot total fROH  for all species, according to IUCN Category 
-passerine_roh_Total_IUCN <- read_excel("passerine_roh_Total_IUCN.xlsx")
-ggplot(passerine_roh_Total_IUCN,aes(x=reorder(group,total),y=total))+geom_boxplot()+theme_bw() + labs(x = "", y = "Total fROH")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("IUCN Category") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-+     axis.title.y = element_text(size = 20))
-
-#Plot short fROH  for all species, according to IUCN Category
-passerine_roh_short_IUCN <- read_excel("passerine_roh_short_IUCN.xlsx")
-ggplot(passerine_roh_short_IUCN,aes(x=reorder(group,short),y=short))+geom_boxplot()+theme_bw() + labs(x = "", y = "Short fROH")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("IUCN Category") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-+     axis.title.y = element_text(size = 20))
-
-#Plot long fROH  for all species, according to IUCN Category
-passerine_roh_long_IUCN <- read_excel("passerine_roh_long_IUCN.xlsx")
-ggplot(passerine_roh_long_IUCN,aes(x=reorder(group,long),y=long))+geom_boxplot()+theme_bw() + labs(x = "", y = "Long fROH")+ theme( plot.title = element_text(size = 20, face = "bold"),axis.text = element_text(size = 16))+ggtitle("IUCN Category") +theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+theme(
-+     axis.title.y = element_text(size = 20))
-
-
-#Summary SD
-http://www.sthda.com/english/wiki/ggplot2-error-bars-quick-start-guide-r-software-and-data-visualization
-
-
-data_summary <- function(data, varname, groupnames){
-    require(plyr)
-    summary_func <- function(x, col){
-        c(mean = mean(x[[col]], na.rm=TRUE),
-          sd = sd(x[[col]], na.rm=TRUE))
-    }
-    data_sum<-ddply(data, groupnames, .fun=summary_func,
-                    varname)
-    data_sum <- rename(data_sum, c("mean" = varname))
-    return(data_sum)
-}
-
-df2 <- data_summary(test, varname="H",groupnames=c("Organism","IUCN"))
-df2$IUCN=as.factor(df2$IUCN)
-df2$Organism=as.factor(df2$Organism)
-
-ggplot(df2, aes(y=H, x=reorder(Organism,H))) + geom_point()+coord_flip()+theme_bw()
-
-
-ggplot(df2, aes(y=H, x=reorder(Organism,H),color=IUCN)) + 
-    geom_line() +
-    geom_point(size=3)+
-    geom_errorbar(aes(ymin=H-sd, ymax=H+sd), width=.2,
-                  position=position_dodge(0.05))+coord_flip()+theme_classic()
-
-#By binary (plus towhee) categories
-ggplot(test, aes(y=H, x=reorder(USFWS,H))) + geom_boxplot(outlier.shape=16,outlier.size=2, notch=FALSE)+ geom_jitter(width = 0.2,color="grey",alpha=0.5)+theme_bw()+xlab("")
