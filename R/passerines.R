@@ -5,22 +5,13 @@ SONG_BIRDS_het$SHORT=as.factor(SONG_BIRDS_het$SHORT)
 ggplot(SONG_BIRDS_het, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.2,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
     scale_color_manual(values = c("#1F78B4","grey","#B2DF8A","grey","#A6CEE3","#33A02C","grey"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595)
 
-SONG_BIRDS_het$SHORT=as.factor(SONG_BIRDS_het$SHORT)
-CCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "CCAL", ]
-Delisted<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Delisted", ]
-INYO<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "INYO", ]
-Not_Threatened<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Not Threatened", ]
-OREG<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "OREG", ]
-SCAL<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "SCAL", ]
-Threatened<-SONG_BIRDS_het[ SONG_BIRDS_het$SHORT == "Threatened", ]
-
 
 ## ROH
 
 library(readxl)
 library(reshape2)
 library(ggplot2)
-SONG_BIRDS_roh <- read_excel("SONG_BIRDS-roh.xlsx")
+SONG_BIRDS_roh <- read_excel("SONG_BIRDS-rohB.xlsx")
 roh<-melt(SONG_BIRDS_roh, id.vars = c("SHORT","Organism","N50"))
 roh$SHORT=as.factor(roh$SHORT)
 mean(roh$value)+2*sd(roh$value)
@@ -40,8 +31,7 @@ data:  H by SHORT
 Kruskal-Wallis chi-squared = 181.16, df = 6, p-value < 2.2e-16
 
 
-pairwise.wilcox.test(SONG_BIRDS_het$H, SONG_BIRDS_het$SHORT,
-+                      p.adjust.method = "BH")
+pairwise.wilcox.test(SONG_BIRDS_het$H, SONG_BIRDS_het$SHORT, p.adjust.method = "BH")
 
 	Pairwise comparisons using Wilcoxon rank sum exact test 
 
@@ -63,8 +53,7 @@ kruskal.test(F100 ~ SHORT, data = SONG_BIRDS_roh)
 
 Kruskal-Wallis chi-squared = 148.95, df = 6, p-value < 2.2e-16
 
-pairwise.wilcox.test(SONG_BIRDS_roh$F100, SONG_BIRDS_roh$SHORT,
-+                      p.adjust.method = "bonf")
+pairwise.wilcox.test(SONG_BIRDS_roh$F100, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf")
 
 	Pairwise comparisons using Wilcoxon rank sum exact test 
 
@@ -90,7 +79,7 @@ data:  F1MB by SHORT
 Kruskal-Wallis chi-squared = 161.44, df = 6, p-value < 2.2e-16
 
 
-pairwise.wilcox.test(SONG_BIRDS_roh$F1MB, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf")
+pairwise.wilcox.test(SONG_BIRDS_roh$F1MB, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf",exact=FALSE)
 
 	Pairwise comparisons using Wilcoxon rank sum test with continuity correction 
 
