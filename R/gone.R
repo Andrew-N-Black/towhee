@@ -8,7 +8,7 @@ library(scales)
 library(matrixStats)
 
 
-####### Bowhead
+####### 
 setwd("~/")
 
 data <- read.csv("~/Output_Ne_INYO-DOC5-20E.renamed.genoE", row.names=NULL, sep="")
@@ -16,13 +16,10 @@ data <- read.csv("~/Output_Ne_INYO-DOC5-20E.renamed.genoE", row.names=NULL, sep=
 # going to look at within last 200 generations
 data <- subset(data[1:200,])
 
+
+
 # quick plot of the means
-ggplot()+
-    geom_line(data=ne, aes(x=(Generation),y=Geometric_mean), color="#B2DF8A", lwd=1.5)+
-    theme_bw()+
-    xlim(0,100)+
-    xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')
-    
+ggplot()+geom_line(data=data, aes(x=(Generation),y=Geometric_mean), color="#B2DF8A", lwd=3,linetype="solid")+theme_bw()+xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')+xlim(0,100)
 
 # load all the iteration files and put it in a matrix
 files <- paste("outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
