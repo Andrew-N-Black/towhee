@@ -7,7 +7,7 @@ library(matrixStats)
 
 
 
-plot(c(0,150),c(0,1500),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
+plot(c(0,50),c(0,1000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 
 setwd("~/")
