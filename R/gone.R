@@ -11,7 +11,7 @@ plot(c(0,50),c(0,1000),type="n",xlab="Generations back in time",ylab=expression(
      cex.lab=1.5)
 
 setwd("~/")
-files <- paste("outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
+files <- paste("INYO_outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
 NeMat <- NULL
 for(i in 1:500){
     dat <- read.table(files[i],skip=2)
@@ -30,12 +30,16 @@ lines(1:500,rowMedians(NeMat[1:500,]),col="#B2DF8A",lwd=4)
 polygon(x=c(1:500,rev(1:500)),y=c(NeCI[1:500,1],rev(NeCI[1:500,2])),col=adjustcolor("#B2DF8A",alpha.f=0.2),border=NA)
 polygon(x=c(1:500,rev(1:500)),y=c(NeCI2[1:500,1],rev(NeCI2[1:500,2])),col=adjustcolor("#B2DF8A",alpha.f=0.3),border=NA)
 
-#Expand to 150
+
+
+
+
+#########Expand to 150###############
 plot(c(0,150),c(0,5000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 
 setwd("~/")
-files <- paste("outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
+files <- paste("INYO_outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
 NeMat <- NULL
 for(i in 1:500){
     dat <- read.table(files[i],skip=2)
