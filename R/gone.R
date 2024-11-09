@@ -1,3 +1,12 @@
+#Quick plot of all regions:
+Ne <- read_excel("Ne.xlsx")
+Ne$Pop <- factor(Ne$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
+ggplot()+geom_line(data=Ne, aes(x=(Generation),y=Geometric_mean,color=Pop), lwd=.9,linetype="solid")+theme_bw()+xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')+ scale_color_brewer(palette="Paired")
+
+
+
+
+
 ##Plot derived from:https://github.com/martykardos/KillerWhaleInbreeding/blob/main/FigureCode/rCode_Fig_ED_1.R
 #Focus on the first 50 generations:
 
@@ -78,7 +87,9 @@ data <- subset(data[1:200,])
 
 
 # quick plot of the means
-ggplot()+geom_line(data=data, aes(x=(Generation),y=Geometric_mean), color="#B2DF8A", lwd=3,linetype="solid")+theme_bw()+xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')+xlim(0,100)
+Ne <- read_excel("Ne.xlsx")
+Ne$Pop <- factor(Ne$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
+ggplot()+geom_line(data=Ne, aes(x=(Generation),y=Geometric_mean,color=Pop), lwd=.9,linetype="solid")+theme_bw()+xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')+ scale_color_brewer(palette="Paired")
 
 # load all the iteration files and put it in a matrix
 files <- paste("outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
