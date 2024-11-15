@@ -1,4 +1,6 @@
 #Quick plot of all regions:
+library(readxl)
+library(ggplot2)
 Ne <- read_excel("Ne.xlsx")
 Ne$Pop <- factor(Ne$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 ggplot()+geom_line(data=Ne, aes(x=(Generation),y=Geometric_mean,color=Pop), lwd=.9,linetype="solid")+theme_bw()+xlab("generation")+ylab("Effective Population Size")+scale_y_continuous(trans='log10')+scale_x_continuous(trans='log10')+ scale_color_brewer(palette="Paired")
