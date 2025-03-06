@@ -16,23 +16,23 @@ ggsave("~/FigureX.svg")
 H <- read_excel("H.xlsx", col_types = c("text", "text", "text", "numeric"))
 H$IUCN=as.factor(H$IUCN)
 
-ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT),outlier.color = "NA")+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
-    scale_color_manual(values = c("#1F78B4","grey","#B2DF8A","grey","#33A02C","#A6CEE3"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+ylim(0,0.015)+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)
+ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
+    scale_color_manual(values = c("#1F78B4","#B2DF8A", "grey", "#A6CEE3","#33A02C","grey"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+ylim(0,0.025)+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)
 ggsave("~/FigureX_shortlist.svg")
 
 
 
+
 #Individual heterozygosity (H) according to IUCN category 
-kruskal.test(H$H, H$IUCN, p.adjust.method = "bonf",exact=FALSE)
+kruskal.test(H$H, H$SHORT, p.adjust.method = "bonf",exact=FALSE)
 
 	Kruskal-Wallis rank sum test
 
-data:  H by IUCN
-Kruskal-Wallis chi-squared =
-197.3, df = 7, p-value <
-2.2e-16
+data:  H$H and H$SHORT
+Kruskal-Wallis chi-squared = 193.28, df =
+5, p-value < 2.2e-16
 
-pairwise.wilcox.test(H$H, H$IUCN, p.adjust.method = "bonf",exact=FALSE)
+pairwise.wilcox.test(H$H, H$SHORT, p.adjust.method = "bonf",exact=FALSE)
 
      CCAL    EN      INYO    LC      NT     OREG    SCAL  
 EN   1.0000  -       -       -       -      -       -     
@@ -64,13 +64,11 @@ ggplot(roh, aes(y=value, x=reorder(IUCN,value))) + geom_boxplot(aes(color=IUCN))
 library(readxl)
 library(reshape2)
 library(ggplot2)
-SONG_BIRDS_roh <- read_excel("~/ROH.xlsx")
-roh<-melt(SONG_BIRDS_roh, id.vars = c("Species","SHORT")))
-roh$IUCN=as.factor(roh$SHORT)
-ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.4,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+facet_grid(~variable,scales = "free_y",)+
-    scale_color_manual(values =c("#1F78B4","grey","#B2DF8A","#33A02C","#A6CEE3"))+ theme(legend.position="none")
-
-
+SONG_BIRDS_roh <- read_excel("~/SONG_BIRDS-rohC.xlsx")
+roh<-melt(SONG_BIRDS_roh, id.vars = c("Organism","SHORT","N50"))
+roh$SHORT=as.factor(roh$SHORT)
+ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.4,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+facet_grid(~variable,scales = "free",)+
+    scale_color_manual(values =c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey","grey"))+ theme(legend.position="none")
 
 
 #Ancestral fROH by IUCN category
@@ -83,7 +81,7 @@ Kruskal-Wallis chi-squared =
 135.96, df = 7, p-value < 2.2e-16
 
 
-pairwise.wilcox.test(SONG_BIRDS_roh$KB, SONG_BIRDS_roh$IUCN, p.adjust.method = "bonf",exact=FALSE)
+pairwise.wilcox.test(SONG_BIRDS_roh$KB, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf",exact=FALSE)
 
 data:  SONG_BIRDS_roh$KB and SONG_BIRDS_roh$IUCN 
 
