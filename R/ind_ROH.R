@@ -20,7 +20,7 @@ data:  ind_roh$Total
 W = 0.82069, p-value = 1.634e-08
 
 
-kruskal.test(Total ~ Pop, data = ind_roh)
+pairwise.wilcox.test(ind_roh$Total, ind_roh$Pop, p.adjust.method = "BH")
 
      CCAL    INYO    OREG   
 INYO 1.9e-07 -       -      
@@ -48,13 +48,16 @@ data:  >1MB by Pop
 Kruskal-Wallis chi-squared = 28.161, df
 = 3, p-value = 3.359e-06
 
+pairwise.wilcox.test(ind_roh$`>1MB`, ind_roh$Pop, p.adjust.method = "BH")
+
+	Pairwise comparisons using Wilcoxon rank sum exact test 
+
+data:  ind_roh$`>1MB` and ind_roh$Pop 
+
      CCAL    INYO    OREG   
-INYO 1.9e-07 -       -      
-OREG 1.5e-06 0.0556  -      
-SCAL 0.0066  1.9e-08 3.9e-09
-
-P value adjustment method: BH 
-
+INYO 0.00058 -       -      
+OREG 0.32370 2.9e-05 -      
+SCAL 0.02605 2.9e-05 0.23569
 
 kruskal.test(`100kb-1MB` ~ Pop, data = ind_roh)
 
