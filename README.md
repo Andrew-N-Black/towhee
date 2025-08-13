@@ -1,4 +1,5 @@
-Conservation genomics of California towhee (Melozone crissalis) in relation to the official list of endangered and threatened wildlife
+Taking the central-marginal hypothesis for a test flight in the genomic era: A case study of a small songbird, the California towhee.
+
 
 
 Andrew N. Black, Jong Yoon Jeon, Chris McCreedy, Safia Janjua, Erangi J Heenkenda, Samarth Mathur, Elise Ferree, Amy L. Fesnock-Parker, Alvaro Hernandez, and J. Andrew DeWoody
