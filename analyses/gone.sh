@@ -9,4 +9,4 @@
 #SBATCH --mem=249G
 
 POP=CCAL,SCAL,OREG,INYO
-bash script_GONE.sh POP
+bash script_GONE.sh $POP
