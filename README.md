@@ -21,7 +21,19 @@ Scripts used in each subcategory listed in the manuscript, corresponds to the st
 **Interspecific patterns of genomic diversity**
 
 
--processing/beagle.sh
+-processing/beagle.sh #modified for each passerine (sub)species
+
+
+-processing/ref_format.sh #modified for each passerine (sub)species
+
+
+-processing/alignment.sh #modified for each passerine (sub)species
+
+
+-analyses/het.sh #modified for each passerine (sub)species
+
+
+-analyses/ROH.sh #modified for each passerine (sub)species
 
 
 **California towhee population structure and phylogeography**
@@ -75,13 +87,6 @@ Scripts used in each subcategory listed in the manuscript, corresponds to the st
 
 
 -analyses/towhee_rga.sh
-
-
-
--processing/ref_format.sh
-
-
--processing/alignment.sh
 
 
 **"Population structure and differentiation"**
