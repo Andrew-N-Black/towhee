@@ -12,21 +12,45 @@ Scripts used in each subcategory listed in the manuscript, corresponds to the st
 
 **"Reference genome sequencing, assembly, and annotation"**
 
-
--assembly_safia.sh
-
-
-**"Whole genome resequencing"**
+-processing/cleaning_safia.sh
+-processing/assembly_safia.sh
 
 
--processing/ref_format.sh
+**Interspecific patterns of genomic diversity**
+-processing/beagle.sh
 
 
--processing/alignment.sh
+**California towhee population structure and phylogeography**
+
+-analyses/pca.sh
 
 
-**"Spatial patterns of gene flow"**
+-analyses/admixture.sh
 
+
+-analyses/clumpp.sh
+
+
+-analyses/fst.sh
+
+
+-analyses/bcfcall.sh
+
+
+-analyses/nu_tree.sh
+
+
+-analyses/mt_tree.sh
+
+**California towhee patterns of genomic diversity**
+
+-analyses/het.sh
+
+
+-analyses/ROH.sh
+
+
+**California towhee spatial connectivity and habitat availability**
 
 -analyses/fst-sites.sh
 
@@ -49,13 +73,11 @@ Scripts used in each subcategory listed in the manuscript, corresponds to the st
 -analyses/towhee_rga.sh
 
 
-**"Genomic diversity"**
+
+-processing/ref_format.sh
 
 
--analyses/het.sh
-
-
--analyses/ROH.sh
+-processing/alignment.sh
 
 
 **"Population structure and differentiation"**
