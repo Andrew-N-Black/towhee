@@ -66,6 +66,12 @@ Scripts used in each subcategory listed in the manuscript, corresponds to the st
 -analyses/ROH.sh
 
 
+-analyses/gone.sh
+
+
+-R/gone.R
+
+
 **California towhee spatial connectivity and habitat availability**
 
 -analyses/fst-sites.sh
