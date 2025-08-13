@@ -1,0 +1,5 @@
+
+
+
+POP=CCAL,SCAL,OREG,INYO
+bash script_GONE.sh POP
