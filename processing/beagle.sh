@@ -26,11 +26,13 @@ cd ../angsd_out
 
 #Convert BCF to VCF
 #autosomes
-bcftools convert -O b -o lemur-DOC3-maf.05.vcf lemur-DOC3-maf.05.bcf
+bcftools convert -O b -o towhee-DOC3-maf.05.vcf  towhee-DOC3-maf.05.bcf
 
 #Use beagle to call genotypes from Genotype likelihoods
 #Autosomes
-java -Xmx300g -jar beagle.27Jan18.7e1.jar gl=lemur-DOC3-maf.05.vcf out=lemur.genotypes
+ml openjdk/11.0.17_8
+java -Xmx100g -jar beagle.27Jan18.7e1.jar gl=towhee-DOC3-maf.05.vcf out=towheeDOC3-genotypes
+
 # ALL_bamlist n=61 including metagenomic samples
 #./revised_bams.txt n=49, excluding metagenomic samples
 #./revised_bamsSub.txt n=46
