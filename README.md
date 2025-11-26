@@ -1,4 +1,5 @@
-Taking the central-marginal hypothesis for a test flight in the genomic era: A case study of a small songbird, the California towhee.
+Contextualizing genomic diversity for conservation: data from peripheral populations of the California towhee support the central-marginal hypothesis
+
 
 
 
