@@ -14,8 +14,14 @@ ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+theme_b
 
 
 
-
-
+#fROH
+library(readxl)
+library(reshape2)
+library(ggplot2)
+SONG_BIRDS_roh <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/SONG_BIRDS-rohC.xlsx")
+roh<-melt(SONG_BIRDS_roh, id.vars = c("Organism","SHORT","N50"))
+roh$SHORT=as.factor(roh$SHORT)
+ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.4,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+scale_color_manual(values =c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey","grey"))+ theme(legend.position="none")+facet_wrap(~variable,scales = "free_y")
 
 
 
