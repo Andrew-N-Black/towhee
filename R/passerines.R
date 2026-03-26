@@ -1,10 +1,36 @@
 #Heterozygosity
 
+
+
+library(readxl)
+library(reshape2)
+library(ggplot2)
+H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.xlsx")
+H$SHORT=as.factor(H$SHORT)
+
+#Full IUCN classification
+ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)+ylim(0,0.025)+
+    scale_color_manual(values = c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##Full IUCN classification:
 library(readxl)
 library(reshape2)
 library(ggplot2)
-H <- read_excel("H.xlsx", col_types = c("text", "text", "numeric"))
+H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.xlsx ", col_types = c("text", "text", "numeric"))
 H$IUCN=as.factor(H$IUCN)
 
 #Full IUCN classification
