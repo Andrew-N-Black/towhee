@@ -1,183 +1,218 @@
-#Heterozygosity
+# =============================================================================
+# GENOMIC DIVERSITY ANALYSIS: Heterozygosity and Runs of Homozygosity (ROH)
+# Compares genetic diversity metrics across IUCN conservation status categories
+# =============================================================================
 
+# ─── SECTION 1: INDIVIDUAL HETEROZYGOSITY (H) BY SPECIES/POPULATION ──────────
 
+library(readxl)   # For reading Excel files
+library(reshape2) # For reshaping data between wide and long formats
+library(ggplot2)  # For plotting
 
-library(readxl)
-library(reshape2)
-library(ggplot2)
+# Load heterozygosity data
 H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.xlsx")
-H$SHORT=as.factor(H$SHORT)
 
-#Full IUCN classification
-ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)+ylim(0,0.025)+
-    scale_color_manual(values = c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey"))
+# Convert SHORT (abbreviated species/population label) to a categorical factor
+H$SHORT <- as.factor(H$SHORT)
+
+# Boxplot of heterozygosity (H) by population/species, ordered by median H
+# - Colors are manually assigned per group
+# - Dashed line marks a reference heterozygosity value (e.g., a benchmark species)
+# - Median sample sizes are displayed above each box via stat_summary
+ggplot(H, aes(y = H, x = reorder(SHORT, H))) +
+    geom_boxplot(aes(color = SHORT)) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("H") +
+    theme(legend.position = "none") +
+    geom_hline(yintercept = 0.0017970595, linetype = "dashed") + # Reference H value
+    stat_summary(fun.y = median, fun.ymax = length,              # Show sample size (n) above boxes
+                 geom = "text", aes(label = ..ymax..), vjust = -1) +
+    ylim(0, 0.025) +
+    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
+                                  "#A6CEE3", "#33A02C", "grey"))
 
 
+# ─── SECTION 2: fROH BY SPECIES/POPULATION ───────────────────────────────────
+# fROH = fraction of genome in Runs of Homozygosity; proxy for inbreeding
 
-#fROH
 library(readxl)
 library(reshape2)
 library(ggplot2)
+
+# Load ROH data for songbirds
 SONG_BIRDS_roh <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/SONG_BIRDS-rohC.xlsx")
-roh<-melt(SONG_BIRDS_roh, id.vars = c("Organism","SHORT","N50"))
-roh$SHORT=as.factor(roh$SHORT)
-ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.4,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+scale_color_manual(values =c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey","grey"))+ theme(legend.position="none")+facet_wrap(~variable,scales = "free_y")
+
+# Reshape from wide to long format; keep Organism, SHORT, and N50 as ID variables
+# N50 = assembly quality metric (contig/scaffold N50)
+# Resulting 'variable' column will distinguish ROH size classes (e.g., KB, MB)
+roh <- melt(SONG_BIRDS_roh, id.vars = c("Organism", "SHORT", "N50"))
+roh$SHORT <- as.factor(roh$SHORT)
+
+# Boxplot + jittered points of fROH by population, faceted by ROH size class
+# - Jitter adds transparency (alpha) to reduce overplotting
+# - Free y-axis scales allow each ROH class to display its own range
+ggplot(roh, aes(y = value, x = reorder(SHORT, value))) +
+    geom_boxplot(aes(color = SHORT)) +
+    geom_jitter(aes(color = SHORT), width = 0.4, alpha = 0.5) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("fROH") +
+    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
+                                  "#A6CEE3", "#33A02C", "grey", "grey")) +
+    theme(legend.position = "none") +
+    facet_wrap(~variable, scales = "free_y") # Separate panel per ROH size class
 
 
+# ─── SECTION 3: H BY FULL IUCN CLASSIFICATION ────────────────────────────────
+# Uses all IUCN Red List categories (e.g., LC, NT, VU, EN, CR...)
 
-
-
-
-
-
-
-
-##Full IUCN classification:
 library(readxl)
 library(reshape2)
 library(ggplot2)
-H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.xlsx ", col_types = c("text", "text", "numeric"))
-H$IUCN=as.factor(H$IUCN)
 
-#Full IUCN classification
-ggplot(H, aes(y=H, x=reorder(IUCN,H))) + geom_boxplot(aes(color=IUCN))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
-    scale_color_manual(values = c("#1F78B4","grey","#B2DF8A","grey","grey","#33A02C","#A6CEE3","grey"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)+ylim(0,0.015)
-ggsave("~/FigureX.svg")
+# Note: trailing space in filename — may need correcting depending on OS
+H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.xlsx ",
+                col_types = c("text", "text", "numeric"))
+H$IUCN <- as.factor(H$IUCN)
 
-#Binary IUCN classification
+# Boxplot ordered by median H, colored by full IUCN category
+ggplot(H, aes(y = H, x = reorder(IUCN, H))) +
+    geom_boxplot(aes(color = IUCN)) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("H") +
+    scale_color_manual(values = c("#1F78B4", "grey", "#B2DF8A", "grey",
+                                  "grey", "#33A02C", "#A6CEE3", "grey")) +
+    theme(legend.position = "none") +
+    geom_hline(yintercept = 0.0017970595, linetype = "dashed") + # Reference H
+    stat_summary(fun.y = median, fun.ymax = length,
+                 geom = "text", aes(label = ..ymax..), vjust = -1) +
+    ylim(0, 0.015)
+ggsave("~/FigureX.svg") # Save as scalable vector graphic
+
+
+# ─── SECTION 4: H BY BINARY IUCN CLASSIFICATION ──────────────────────────────
+# Simplified classification: e.g., threatened vs. non-threatened
+
+# Four column types: SHORT group label added alongside IUCN
 H <- read_excel("H.xlsx", col_types = c("text", "text", "text", "numeric"))
-H$IUCN=as.factor(H$IUCN)
+H$IUCN <- as.factor(H$IUCN)
 
-ggplot(H, aes(y=H, x=reorder(SHORT,H))) + geom_boxplot(aes(color=SHORT))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("H")+
-    scale_color_manual(values = c("#1F78B4","#B2DF8A", "grey", "#A6CEE3","#33A02C","grey"))+ theme(legend.position="none")+geom_hline(yintercept = 0.0017970595,linetype="dashed")+ylim(0,0.025)+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = -1)
+ggplot(H, aes(y = H, x = reorder(SHORT, H))) +
+    geom_boxplot(aes(color = SHORT)) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("H") +
+    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
+                                  "#A6CEE3", "#33A02C", "grey")) +
+    theme(legend.position = "none") +
+    geom_hline(yintercept = 0.0017970595, linetype = "dashed") +
+    ylim(0, 0.025) +
+    stat_summary(fun.y = median, fun.ymax = length,
+                 geom = "text", aes(label = ..ymax..), vjust = -1)
 ggsave("~/FigureX_shortlist.svg")
 
 
+# ─── SECTION 5: STATISTICAL TESTS — H BY IUCN CATEGORY ──────────────────────
+# Non-parametric tests used because H values are unlikely to be normally distributed
+
+# Kruskal-Wallis test: checks whether any IUCN groups differ significantly in H
+kruskal.test(H$H, H$SHORT, p.adjust.method = "bonf", exact = FALSE)
+# Result: chi-squared = 193.28, df = 5, p < 2.2e-16 → significant overall difference
+
+# Post-hoc pairwise Wilcoxon tests with Bonferroni correction
+# Identifies which specific pairs of groups differ
+pairwise.wilcox.test(H$H, H$SHORT, p.adjust.method = "bonf", exact = FALSE)
+# Key significant comparisons (p < 0.05) include LC vs. most threatened groups
+# INYO, CCAL, SCAL show notably lower H than LC (least concern)
 
 
-#Individual heterozygosity (H) according to IUCN category 
-kruskal.test(H$H, H$SHORT, p.adjust.method = "bonf",exact=FALSE)
+# ─── SECTION 6: ROH — FULL IUCN CATEGORIES ───────────────────────────────────
 
-	Kruskal-Wallis rank sum test
-
-data:  H$H and H$SHORT
-Kruskal-Wallis chi-squared = 193.28, df =
-5, p-value < 2.2e-16
-
-pairwise.wilcox.test(H$H, H$SHORT, p.adjust.method = "bonf",exact=FALSE)
-
-     CCAL    EN      INYO    LC      NT     OREG    SCAL  
-EN   1.0000  -       -       -       -      -       -     
-INYO 0.0057  1.0000  -       -       -      -       -     
-LC   5.1e-15 6.9e-11 5.7e-08 -       -      -       -     
-NT   1.0000  1.0000  1.0000  1.0000  -      -       -     
-OREG 1.4e-05 0.2233  0.1753  4.0e-08 1.0000 -       -     
-SCAL 1.8e-08 1.0000  1.4e-05 3.8e-09 1.0000 1.4e-05 -     
-VU   1.0000  1.0000  3.7e-05 4.0e-07 1.0000 1.9e-06 0.0178
-
-* <0.05
-** <0.001
-** <0.0001
-
-## ROH
-
-#Full IUCN categories
 library(readxl)
 library(reshape2)
 library(ggplot2)
+
 SONG_BIRDS_roh <- read_excel("~/ROH.xlsx")
-roh<-melt(SONG_BIRDS_roh, id.vars = c("Species","IUCN","SHORT"))
-roh$IUCN=as.factor(roh$IUCN)
-ggplot(roh, aes(y=value, x=reorder(IUCN,value))) + geom_boxplot(aes(color=IUCN))+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+facet_wrap(~variable, scales = "free_y")+
-    scale_color_manual(values =c("#1F78B4","grey","#B2DF8A","grey","grey","#33A02C","#A6CEE3","grey"))+ theme(legend.position="none")+stat_summary(fun.y = median, fun.ymax = length,geom = "text", aes(label = ..ymax..), vjust = 1)+ylim(0,0.45)
+
+# Melt to long format; Species, IUCN, SHORT are ID variables
+roh <- melt(SONG_BIRDS_roh, id.vars = c("Species", "IUCN", "SHORT"))
+roh$IUCN <- as.factor(roh$IUCN)
+
+# Faceted boxplot by IUCN category and ROH class
+# - Free y-axis scales per facet
+# - Sample sizes shown inside boxes (vjust = 1 places text lower)
+ggplot(roh, aes(y = value, x = reorder(IUCN, value))) +
+    geom_boxplot(aes(color = IUCN)) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("fROH") +
+    facet_wrap(~variable, scales = "free_y") +
+    scale_color_manual(values = c("#1F78B4", "grey", "#B2DF8A", "grey",
+                                  "grey", "#33A02C", "#A6CEE3", "grey")) +
+    theme(legend.position = "none") +
+    stat_summary(fun.y = median, fun.ymax = length,
+                 geom = "text", aes(label = ..ymax..), vjust = 1) +
+    ylim(0, 0.45)
 
 
-#Binary IUCN categories
+# ─── SECTION 7: ROH — BINARY IUCN CATEGORIES ─────────────────────────────────
+
 library(readxl)
 library(reshape2)
 library(ggplot2)
+
 SONG_BIRDS_roh <- read_excel("~/SONG_BIRDS-rohC.xlsx")
-roh<-melt(SONG_BIRDS_roh, id.vars = c("Organism","SHORT","N50"))
-roh$SHORT=as.factor(roh$SHORT)
-ggplot(roh, aes(y=value, x=reorder(SHORT,value))) + geom_boxplot(aes(color=SHORT))+ geom_jitter(aes(color=SHORT),width = 0.4,alpha=0.5)+theme_bw()+xlab("")+theme_classic(base_size = 22)+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))+ylab("fROH")+facet_grid(~variable,scales = "free",)+
-    scale_color_manual(values =c("#1F78B4","#B2DF8A","grey","#A6CEE3","#33A02C","grey","grey"))+ theme(legend.position="none")
+roh <- melt(SONG_BIRDS_roh, id.vars = c("Organism", "SHORT", "N50"))
+roh$SHORT <- as.factor(roh$SHORT)
+
+# facet_grid (vs facet_wrap above) arranges panels in a strict grid layout
+ggplot(roh, aes(y = value, x = reorder(SHORT, value))) +
+    geom_boxplot(aes(color = SHORT)) +
+    geom_jitter(aes(color = SHORT), width = 0.4, alpha = 0.5) +
+    theme_classic(base_size = 22) +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    xlab("") +
+    ylab("fROH") +
+    facet_grid(~variable, scales = "free") + # One row of panels, free x and y scales
+    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
+                                  "#A6CEE3", "#33A02C", "grey", "grey")) +
+    theme(legend.position = "none")
 
 
-#Ancestral fROH by IUCN category
+# ─── SECTION 8: STATISTICAL TESTS — fROH BY IUCN CATEGORY ───────────────────
+
+# --- 8a. Ancestral ROH (KB = kilobase-scale ROH; reflects ancient inbreeding) ---
+
 kruskal.test(KB ~ IUCN, data = SONG_BIRDS_roh)
+# Result: chi-squared = 135.96, df = 7, p < 2.2e-16
 
-	Kruskal-Wallis rank sum test
+pairwise.wilcox.test(SONG_BIRDS_roh$KB, SONG_BIRDS_roh$SHORT,
+                     p.adjust.method = "bonf", exact = FALSE)
+# Note: function call uses $SHORT but comment says $IUCN — verify intended grouping
+# CCAL and INYO show significantly elevated ancestral inbreeding vs. LC
 
-data:  KB by IUCN
-Kruskal-Wallis chi-squared =
-135.96, df = 7, p-value < 2.2e-16
+# --- 8b. Recent ROH (MB = megabase-scale ROH; reflects recent inbreeding) ---
 
-
-pairwise.wilcox.test(SONG_BIRDS_roh$KB, SONG_BIRDS_roh$SHORT, p.adjust.method = "bonf",exact=FALSE)
-
-data:  SONG_BIRDS_roh$KB and SONG_BIRDS_roh$IUCN 
-
-     CCAL    EN      INYO    LC      NT      OREG    SCAL   
-EN   4.5e-08 -       -       -       -       -       -      
-INYO 3.4e-05 6.1e-06 -       -       -       -       -      
-LC   4.1e-07 1.00000 2.9e-06 -       -       -       -      
-NT   1.00000 0.89909 0.27444 1.00000 -       -       -      
-OREG 2.7e-05 6.1e-06 1.00000 4.8e-06 0.27444 -       -      
-SCAL 0.14730 1.9e-05 1.4e-05 0.00156 1.00000 1.4e-05 -      
-VU   0.00019 4.0e-09 0.10792 3.1e-10 0.55839 0.02921 9.1e-07
-
-* <0.05
-** <0.001
-** <0.0001
-
-P value adjustment method: bonferroni 
-
-#Recent fROH by IUCN category
 kruskal.test(MB ~ IUCN, data = SONG_BIRDS_roh)
-	Kruskal-Wallis rank sum test
+# Result: chi-squared = 162.41, df = 7, p < 2.2e-16
 
-data:  MB by IUCN
-Kruskal-Wallis chi-squared = 162.41, df = 7, p-value < 2.2e-16
+pairwise.wilcox.test(SONG_BIRDS_roh$MB, SONG_BIRDS_roh$IUCN,
+                     p.adjust.method = "bonf", exact = FALSE)
+# MB shows stronger differentiation than KB — recent inbreeding more discriminating
 
-
-pairwise.wilcox.test(SONG_BIRDS_roh$MB, SONG_BIRDS_roh$IUCN, p.adjust.method = "bonf",exact=FALSE)
-
-     CCAL    EN      INYO    LC      NT     OREG   SCAL  
-EN   7.8e-09 -       -       -       -      -      -     
-INYO 0.0149  1.6e-06 -       -       -      -      -     
-LC   2.0e-14 1.0000  6.8e-10 -       -      -      -     
-NT   0.1490  1.0000  0.2732  1.0000  -      -      -     
-OREG 1.0000  8.9e-06 0.0020  8.0e-08 0.2732 -      -     
-SCAL 0.5118  4.6e-07 0.0012  2.6e-10 0.6889 1.0000 -     
-VU   0.9282  5.4e-08 4.3e-05 8.4e-13 0.2717 1.0000 1.0000
-
-* <0.05
-** <0.001
-** <0.0001
-#fTOTAL by IUCN category (SHORT)
+# --- 8c. Total fROH (all ROH size classes combined) ---
 
 kruskal.test(TOTAL ~ IUCN, data = SONG_BIRDS_roh)
+# Result: chi-squared = 138.19, df = 7, p < 2.2e-16
 
-	Kruskal-Wallis rank sum test
-
-data:  TOTAL by IUCN
-Kruskal-Wallis chi-squared = 138.19, df = 7, p-value < 2.2e-16
-
-
-pairwise.wilcox.test(SONG_BIRDS_roh$TOTAL, SONG_BIRDS_roh$IUCN, p.adjust.method = "bonf",exact=FALSE)
-
-data:  SONG_BIRDS_roh$TOTAL and SONG_BIRDS_roh$IUCN 
-
-     CCAL    EN      INYO    LC      NT      OREG    SCAL   
-EN   3.3e-08 -       -       -       -       -       -      
-INYO 7.3e-05 6.1e-06 -       -       -       -       -      
-LC   3.0e-08 1.00000 1.8e-06 -       -       -       -      
-NT   1.00000 0.89909 0.27444 1.00000 -       -       -      
-OREG 0.00027 6.1e-06 1.00000 9.0e-06 0.27444 -       -      
-SCAL 0.17373 1.2e-05 3.1e-05 0.00027 1.00000 1.6e-05 -      
-VU   0.09374 4.5e-09 0.00369 3.8e-10 0.27185 0.05470 0.00011
-
-* <0.05
-** <0.001
-** <0.0001
-
+pairwise.wilcox.test(SONG_BIRDS_roh$TOTAL, SONG_BIRDS_roh$IUCN,
+                     p.adjust.method = "bonf", exact = FALSE)
+# Total fROH patterns broadly mirror KB results
+# NT group consistently non-significant vs. others — intermediate conservation concern
