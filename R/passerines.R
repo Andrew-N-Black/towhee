@@ -168,7 +168,7 @@ library(readxl)
 library(reshape2)
 library(ggplot2)
 
-SONG_BIRDS_roh <- read_excel("~/SONG_BIRDS-rohC.xlsx")
+SONG_BIRDS_roh <- read_excel("~/Documents/Research/Towhee/Black_analysis/SONG_BIRDS-rohC.xlsx")
 roh <- melt(SONG_BIRDS_roh, id.vars = c("Organism", "SHORT", "N50"))
 roh$SHORT <- as.factor(roh$SHORT)
 
@@ -190,29 +190,44 @@ ggplot(roh, aes(y = value, x = reorder(SHORT, value))) +
 
 # --- 8a. Ancestral ROH (KB = kilobase-scale ROH; reflects ancient inbreeding) ---
 
-kruskal.test(KB ~ IUCN, data = SONG_BIRDS_roh)
-# Result: chi-squared = 135.96, df = 7, p < 2.2e-16
+kruskal.test(F100 ~ SHORT, data = SONG_BIRDS_roh)
+#Kruskal-Wallis chi-squared = 147.28, df = 5, p-value <2.2e-16
 
-pairwise.wilcox.test(SONG_BIRDS_roh$KB, SONG_BIRDS_roh$SHORT,
-                     p.adjust.method = "bonf", exact = FALSE)
-# Note: function call uses $SHORT but comment says $IUCN — verify intended grouping
-# CCAL and INYO show significantly elevated ancestral inbreeding vs. LC
+kruskal.test(F1MB ~ SHORT, data = SONG_BIRDS_roh)
+#Kruskal-Wallis chi-squared = 159.93, df = 5, p-value <2.2e-16
 
-# --- 8b. Recent ROH (MB = megabase-scale ROH; reflects recent inbreeding) ---
+kruskal.test(Ftotal ~ SHORT, data = SONG_BIRDS_roh)
+#Kruskal-Wallis chi-squared = 147.31, df = 5, p-value <2.2e-16
 
-kruskal.test(MB ~ IUCN, data = SONG_BIRDS_roh)
-# Result: chi-squared = 162.41, df = 7, p < 2.2e-16
 
-pairwise.wilcox.test(SONG_BIRDS_roh$MB, SONG_BIRDS_roh$IUCN,
-                     p.adjust.method = "bonf", exact = FALSE)
-# MB shows stronger differentiation than KB — recent inbreeding more discriminating
 
-# --- 8c. Total fROH (all ROH size classes combined) ---
+pairwise.wilcox.test(SONG_BIRDS_roh$F100, SONG_BIRDS_roh$SHORT,p.adjust.method = "bonf", exact = FALSE)
+               CCAL    INYO    Not Threatened OREG    SCAL   
+INYO           1.8e-05 -       -              -       -      
+Not Threatened 2.0e-12 1.2e-08 -              -       -      
+OREG           1.4e-05 1.00000 9.7e-09        -       -      
+SCAL           0.07891 7.5e-06 1.3e-07        7.5e-06 -      
+Threatened     1.00000 0.00015 2.5e-10        7.1e-05 1.00000
 
-kruskal.test(TOTAL ~ IUCN, data = SONG_BIRDS_roh)
-# Result: chi-squared = 138.19, df = 7, p < 2.2e-16
+P value adjustment method: bonferroni 
 
-pairwise.wilcox.test(SONG_BIRDS_roh$TOTAL, SONG_BIRDS_roh$IUCN,
-                     p.adjust.method = "bonf", exact = FALSE)
-# Total fROH patterns broadly mirror KB results
-# NT group consistently non-significant vs. others — intermediate conservation concern
+pairwise.wilcox.test(SONG_BIRDS_roh$F1MB, SONG_BIRDS_roh$SHORT,p.adjust.method = "bonf", exact = FALSE)
+               CCAL    INYO    Not Threatened OREG    SCAL   
+INYO           0.00796 -       -              -       -      
+Not Threatened < 2e-16 2.3e-12 -              -       -      
+OREG           1.00000 0.00106 4.0e-11        -       -      
+SCAL           0.27419 0.00066 1.2e-14        1.00000 -      
+Threatened     1.6e-05 6.1e-07 4.4e-09        0.02719 0.05331
+
+P value adjustment method: bonferroni 
+
+pairwise.wilcox.test(SONG_BIRDS_roh$Ftotal, SONG_BIRDS_roh$SHORT,p.adjust.method = "bonf", exact = FALSE)
+               CCAL    INYO    Not Threatened OREG    SCAL   
+INYO           3.9e-05 -       -              -       -      
+Not Threatened 6.5e-13 2.0e-08 -              -       -      
+OREG           0.00015 0.84814 2.4e-08        -       -      
+SCAL           0.09307 1.7e-05 4.1e-08        8.8e-06 -      
+Threatened     0.75974 1.4e-05 8.7e-10        0.00011 1.00000
+
+P value adjustment method: bonferroni 
+
