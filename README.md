@@ -2,6 +2,7 @@ Natural and anthropogenic drivers of genomic diversity in the California towhee:
 
 
 
+
 Scripts used in each subcategory listed in the manuscript, corresponds to the structure below:
 
 
