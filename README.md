@@ -126,7 +126,7 @@ Natural and anthropogenic drivers of genomic diversity in the California towhee:
 **"plotting / summary statistics"**
 
 
--R/*.R
+-R/*.R`
 
 
 
