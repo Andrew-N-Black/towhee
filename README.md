@@ -1,9 +1,4 @@
-Contextualizing genomic diversity for conservation: data from peripheral populations of the California towhee support the central-marginal hypothesis
-
-
-
-
-Andrew N. Black, Jong Yoon Jeon, Chris McCreedy, Safia Janjua, Erangi J Heenkenda, Samarth Mathur, Elise Ferree, Amy L. Fesnock-Parker, Alvaro Hernandez, and J. Andrew DeWoody
+Natural and anthropogenic drivers of genomic diversity in the California towhee: conservation implications for peripheral populations
 
 
 
