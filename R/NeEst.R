@@ -1,3 +1,5 @@
+
+
 library(ggplot2)
 library(forcats)
 k<-ggplot(Ne,aes(x=forcats::fct_reorder(Region, NE, .fun = median),y=NE))
