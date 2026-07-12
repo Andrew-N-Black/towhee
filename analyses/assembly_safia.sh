@@ -9,14 +9,24 @@
 #SBATCH -e hifiasm-204710
 #SBATCH -o hifiasm-204710
 
+# =============================================================================
+# REFERENCE GENOME ASSEMBLY PIPELINE (California towhee, PacBio HiFi reads)
+# 1) De novo assembly with hifiasm
+# 2) BUSCO completeness check on the raw assembly
+# 3) Purge_dups: remove duplicated haplotigs/overlaps using PacBio read depth
+# 4) QUAST assembly quality report
+# =============================================================================
+
 cd $SLURM_SUBMIT_DIR
 
+# Step 1: de novo assembly of HiFi reads
 /depot/fnrdewoody/apps/hifiasm/hifiasm -o CALT.asm -t 32 4SMRTcells.hifi_reads.fastq.gz
 
 module purge --force
 module load anaconda
 conda create -n towhee-busco -c conda-forge -c bioconda busco=5.2.2
 conda activate towhee-busco
+# Step 2: BUSCO gene completeness on the primary contig assembly
 busco -i all4.asm.bp.p_ctg.fa -l passeriformes_odb10 -o towhee_busco_report -m genome -f
 
 #add a path to search apps
@@ -61,6 +71,7 @@ cd runner && python3 setup.py install --user
 PB_list=$`cat /scratch/bell/sjanjua/Practice/Towhee_HiFi.fofn`
 PRI_ASM=/scratch/bell/sjanjua/Practice/all.asm.p_ctg.fa
 
+# Step 3: Purge_dups — remove duplicated haplotigs/overlaps from the primary assembly
 #Step 1. Run minimap2 to align pacbio data and generate paf files, then calculate read depth histogram and base-level read depth. Commands are as follows:
 for i in $PB_list
 do
@@ -87,6 +98,7 @@ module purge --force
 module load bioinfo
 module load quast/3.2
 
+# Step 4: QUAST assembly quality report
 # Convert to gfa to fasta
 awk '/^S/{print ">"$2"\n"$3}' /scratch/bell/sjanjua/towhee/practice/m64108e_210614_204710/m64108e_210614_204710.asm.bp.p_ctg.gfa | fold > /scratch/bell/sjanjua/towhee/practice/m64108e_210614_204710/m64108e_210614_204710.asm.bp.p_ctg.fa
 

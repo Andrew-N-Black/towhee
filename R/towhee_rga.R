@@ -1,3 +1,12 @@
+# =============================================================================
+# ResistanceGA: LANDSCAPE RESISTANCE OPTIMIZATION FOR SPATIAL CONNECTIVITY
+# Optimizes resistance surfaces (habitat, climate, landcover, topography)
+# against pairwise genetic Fst (all individuals + separately for females and
+# males) using genetic algorithms, then bootstraps model support via AIC.
+# Run via analyses/towhee_rga.sh; output resistance surfaces feed into
+# Omniscape (analyses/towhee_omni.jl/.sh) for connectivity mapping.
+# =============================================================================
+
 ##Load ResistanceGA
 library(terra, lib.loc = "/home/jeon96/R/bell/4.1.2-gcc-9.3.0-rw7vp7m/")
 library(raster, lib.loc = "/home/jeon96/R/bell/4.1.2-gcc-9.3.0-rw7vp7m/")
@@ -13,7 +22,7 @@ dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/"))
 write.dir <- "/scratch/bell/jeon96/Towhee/rga/"
 
 ##Load data
-# Genetic data
+# Genetic data: pairwise Fst matrices for all individuals, females only, and males only
 towhee_fst <- readRDS("towhee_fst.rds")
 towhee_fst <- as.matrix(towhee_fst)
 towheeF_fst <- readRDS("towheeF_fst.rds")
@@ -21,11 +30,11 @@ towheeF_fst <- as.matrix(towheeF_fst)
 towheeM_fst <- readRDS("towheeM_fst.rds")
 towheeM_fst <- as.matrix(towheeM_fst)
 
-# Load and aggregate raster data
+# Load and aggregate raster data (environmental covariate stack)
 covariates <- readRDS("towhee_stack.rds")
 
 
-# Coordinates data
+# Coordinates data: sample site lat/longs, reprojected into the raster's CRS
 towhee_sites <- read.csv("towhee_longlat.csv")
 towhee_sites_ord <- towhee_sites %>% arrange(desc(Lat)) #arrange sites by descending latitude
 towhee_sites_coords_raw <- SpatialPoints(coords = towhee_sites_ord[,2:3], proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
@@ -41,7 +50,7 @@ towheeM_sites_ord <- towheeM_sites %>% arrange(desc(Lat)) #arrange sites by desc
 towheeM_sites_coords_raw <- SpatialPoints(coords = towheeM_sites_ord[,2:3], proj4string = CRS("+proj=longlat +datum=WGS84 +no_defs"))
 towheeM_sites_coords <- spTransform(towheeM_sites_coords_raw, crs(covariates))
 
-# Reorder gd matrices according to the descending latitude
+# Reorder genetic-distance (Fst) matrices to match the descending-latitude site order
 th_order <- towhee_sites_ord$Pop_ID
 towhee_fst_ord <- towhee_fst[order(factor(rownames(towhee_fst), levels = th_order)),order(factor(colnames(towhee_fst), levels = th_order))] 
 
@@ -51,8 +60,10 @@ towheeF_fst_ord <- towheeF_fst[order(factor(rownames(towheeF_fst), levels = th_o
 th_orderM <- towheeM_sites_ord$Pop_ID
 towheeM_fst_ord <- towheeM_fst[order(factor(rownames(towheeM_fst), levels = th_orderM)),order(factor(colnames(towheeM_fst), levels = th_orderM))] 
 
-# Separate each raster layer for ResistanceGA functions later
-# Assign "10 * maximum value of each layer" for NA values
+# Separate each raster layer for ResistanceGA functions later.
+# Downsample (aggregate) each covariate raster and assign
+# "10 * maximum value of each layer" to NA cells, since ResistanceGA
+# cannot handle missing data in the resistance surfaces.
 ele <- raster("dem_res_ext.tif")
 ele_lowres <- terra::aggregate(ele, fact=20, fun="mean", cores=64, na.rm = TRUE)
 ele_lowres@data@values[is.nan(ele_lowres@data@values)]<-NA
@@ -125,10 +136,11 @@ lancov_lowres[is.na(lancov_lowres)] <- 10*maxValue(lancov_lowres)
 writeRaster(lancov_lowres, filename = paste0(write.dir,"lancov_low.asc"), overwrite = TRUE)
 lancov_lowres<-raster("/scratch/bell/jeon96/Towhee/rga/lancov_low.asc")
 
+# Bundle covariates into four candidate model sets to be optimized separately below
 covariates_hbt_lowres <- stack(ele_lowres, slo_lowres, asp_lowres, lancov_lowres) #habitat model covariates
-covariates_clim_lowres <- stack(bio1_lowres, bio12_lowres, bio2_lowres, bio4_lowres, bio15_lowres) #habitat model covariates
-covariates_lan_lowres <- stack(lancov_lowres) #habitat model covariates
-covariates_topo_lowres <- stack(ele_lowres, slo_lowres, asp_lowres)
+covariates_clim_lowres <- stack(bio1_lowres, bio12_lowres, bio2_lowres, bio4_lowres, bio15_lowres) #climate model covariates
+covariates_lan_lowres <- stack(lancov_lowres) #landcover-only model covariate
+covariates_topo_lowres <- stack(ele_lowres, slo_lowres, asp_lowres) #topography model covariates
 saveRDS(covariates_hbt_lowres, "covariates_hbt_lowres.rds")
 saveRDS(covariates_clim_lowres, "covariates_clim_lowres.rds")
 saveRDS(covariates_lan_lowres, "covariates_lan_lowres.rds")
@@ -151,7 +163,7 @@ crs(th.localesM) <- crs(covariates)
 
 print("Data loading and preprocessing has been finished.")
 
-## towhee all ind.
+## towhee all ind. — output directories for each candidate model, split by all/female/male
 dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/out/"))
 dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/all/"))
 dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/all/hbt/"))
@@ -171,6 +183,7 @@ dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/male/"))
 dir.create(file.path("/scratch/bell/jeon96/Towhee/rga/male/topo/"))
 topo_out_dir <- "/scratch/bell/jeon96/Towhee/rga/male/topo/"
 
+# Prepare genetic-distance inputs (observed Fst as response) for the GA optimization, per sex group
 gdist.inputs <- gdist.prep(n.Pops = length(th.locales),
                            samples = th.locales,
                            response = as.vector(lower(towhee_fst_ord)),
@@ -186,6 +199,8 @@ gdistM.inputs <- gdist.prep(n.Pops = length(th.localesM),
                            response = as.vector(lower(towheeM_fst_ord)),
                            method = 'commuteDistance')
                            
+# Optimize each candidate covariate set (habitat, climate, landcover, topography)
+# via genetic algorithm against the all-individuals Fst matrix
 hbt_GA.inputs <- GA.prep(method = "LL",
                          ASCII.dir = covariates_hbt_lowres,
                          scale = FALSE,
@@ -239,7 +254,9 @@ saveRDS(topoF_MS_results, file="/scratch/bell/jeon96/Towhee/rga/female/topo_MS_r
 saveRDS(topoM_MS_results, file="/scratch/bell/jeon96/Towhee/rga/male/topo_MS_results.rds") 
 print("Topographic Multi-surface model has been optimized.")
 
-# Boostrapping
+# Bootstrapping: compare AIC support for the optimized habitat, climate,
+# landcover, and topography models to identify the best-supported drivers
+# of genetic differentiation.
 # Extract relevant components from optimization outputs
 # Make a list of cost/resistance distance matrices
 hbt_MS_results <- readRDS("/scratch/bell/jeon96/Towhee/rga/all/hbt_MS_results.rds")
@@ -262,7 +279,8 @@ th_k <- rbind(hbt_MS_results$k,
 th_response <- matrix(0, 10, 10) #number of populations
 th_response[lower.tri(th_response)] <- lower(towhee_fst_ord)
 
-# Run bootstrap (obs = num.pop)
+# Run bootstrap: repeatedly subsample populations and refit each model's
+# AIC support, to assess robustness of the ranking (obs = num.pop)
 (th_AIC.boot <- Resist.boot(mod.names = names(th_mat.list),
                             dist.mat = th_mat.list,
                             n.parameters = th_k[,2],

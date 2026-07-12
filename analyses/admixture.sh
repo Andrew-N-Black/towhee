@@ -7,8 +7,15 @@
 #SBATCH --error=%x_%j.out
 #SBATCH --output=%x_%j.out
 #SBATCH --mem=249G
+# =============================================================================
+# ADMIXTURE / POPULATION STRUCTURE via NGSadmix
+# Runs NGSadmix for K=1..10 clusters, 99 replicate runs each (to check
+# convergence/support for each K), on genotype likelihoods from beagle.sh.
+# Output .qopt files are later merged across replicates with CLUMPP (clumpp.sh).
+# =============================================================================
 #for  ((i=1;i<=10;i++));  do mkdir R_$i; done
 j="1"
+# Outer loop: 99 replicate runs (R_1..R_99); inner loop: K=1..10 clusters per replicate
 while [ $j -lt 100 ]
 do
   	for i in {1..10}

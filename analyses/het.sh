@@ -7,13 +7,19 @@
 #SBATCH --output=het.out
 #SBATCH --job-name=produce_het_SLURMM_jobs
 
-
+# =============================================================================
+# INDIVIDUAL HETEROZYGOSITY job generator
+# For each sample in sample.list, writes a per-sample SLURM job that runs
+# ANGSD (single-sample SAF) + realSFS to estimate genome-wide heterozygosity.
+# Submit the generated jobs_het/*.sh scripts separately. Feeds R/heterozygosity.R.
+# =============================================================================
 
 mkdir jobs_het
 mkdir HET
 #cat bams | cut -d "/" -f 7 | sed 's/.bam//g' >sample.list
+# Generate one SLURM job script per sample
 while read -a line
-do 
+do
 	echo "#!/bin/sh -l
 #SBATCH -A fnrtowhee
 #SBATCH -n 5
@@ -35,5 +41,5 @@ cd /scratch/bell/blackan/TOWHEE/angsd_out
 
 done < ./sample.list
 
-#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source ./jobs
+#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source ./jobs  # submit all generated jobs
 

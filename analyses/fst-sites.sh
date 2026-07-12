@@ -7,6 +7,14 @@
 #SBATCH -e %x_%j.err
 #SBATCH -o %x_%j.out
 
+# =============================================================================
+# SPATIAL Fst BETWEEN SAMPLING SITES (all individuals, Sites 1-10)
+# Same ANGSD SAF -> realSFS -> pairwise/sliding-window Fst workflow as fst.sh,
+# but computed between fine-scale sampling sites rather than the four regional
+# populations, to assess spatial connectivity. See also fst-sitesF.sh /
+# fst-sitesM.sh for the sex-specific (female/male) versions.
+# =============================================================================
+
 #This script modified from a script written by Andrew Black
 
 module load biocontainers
@@ -104,7 +112,7 @@ angsd -P 64 -out /scratch/bell/dewoody/TOWHEE/angsd_out/FST/Site10 \
 
 cd ./angsd_out/
 
-#calculate the 1D SFS from allele freq likelihoods
+#calculate the 1D SFS from allele freq likelihoods, per site
 realSFS FST/Site1.saf.idx -P 64 -fold 1 > FST/Site1.sfs
 realSFS FST/Site2.saf.idx -P 64 -fold 1 > FST/Site2.sfs
 realSFS FST/Site3.saf.idx -P 64 -fold 1 > FST/Site3.sfs
@@ -117,7 +125,7 @@ realSFS FST/Site9.saf.idx -P 64 -fold 1 > FST/Site9.sfs
 realSFS FST/Site10.saf.idx -P 64 -fold 1 > FST/Site10.sfs
 
 
-#calculate the 2D SFS
+#calculate the 2D SFS for every site pair (i<j)
 for i in {1..10}; do
   for j in {1..10}; do
     if [[ $i -lt $j ]]; then
@@ -155,8 +163,8 @@ for i in {1..10}; do
 done
 
 
-#sliding window analysis among all population samples
-realSFS fst index FST/Site1.saf.idx FST/Site2.saf.idx FST/Site3.saf.idx FST/Site4.saf.idx FST/Site5.saf.idx \ 
+#sliding window analysis among all population samples (50kb windows, 25kb step, across all 10 sites jointly)
+realSFS fst index FST/Site1.saf.idx FST/Site2.saf.idx FST/Site3.saf.idx FST/Site4.saf.idx FST/Site5.saf.idx \
 FST/Site6.saf.idx FST/Site7.saf.idx FST/Site8.saf.idx FST/Site9.saf.idx FST/Site10.saf.idx \
 -sfs FST/*.ml -fstout FST/out/all_sites -P 64
 

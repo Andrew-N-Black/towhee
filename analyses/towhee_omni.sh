@@ -9,6 +9,11 @@
 #SBATCH --mail-user=jeon96@purdue.edu
 #SBATCH -o %x_%j.log
 
+# =============================================================================
+# Launches the Julia Omniscape connectivity model (towhee_omni.jl) as a SLURM
+# job, using omni_config.ini for model parameters.
+# =============================================================================
+
 module load julia
 cd /scratch/bell/jeon96/Towhee/
 

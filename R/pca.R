@@ -1,3 +1,9 @@
+# =============================================================================
+# FIGURE 3: PCA of California towhee population structure
+# Eigendecomposes a PCAngsd genotype covariance matrix and plots PC1 vs PC2,
+# colored by population.
+# =============================================================================
+
 library(reshape2)
 library(readxl)
 library(ggplot2)
@@ -11,10 +17,10 @@ sample_pop_sites <- read_excel("Library/CloudStorage/Box-Box/Personal/Postdoc_Pu
 sample_pop_sites$Pop <- factor(sample_pop_sites$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 cov<-as.matrix(read.table("Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/pca-towhee.cov"))
 axes<-eigen(cov)
-head(axes$values/sum(axes$values)*100)
+head(axes$values/sum(axes$values)*100) # % variance explained by each PC
 #[1] 7.751829 5.941751 4.167590 2.001211
 
-PC1_3<-as.data.frame(axes$vectors[,1:3])
+PC1_3<-as.data.frame(axes$vectors[,1:3]) # eigenvectors for PC1-PC3
 title1<-"Population"
 title2<-"Site"
 

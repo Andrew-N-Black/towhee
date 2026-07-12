@@ -1,22 +1,27 @@
+ # =============================================================================
+ # CLUMPP: align/merge NGSadmix ancestry (Q) matrices across replicate runs
+ # so cluster labels are consistent before plotting (R/admixture.R).
+ # =============================================================================
+
  #Copy qopt files for each run into individual directories
  cp ../../ADX/R_{1..10}/*K3*.qopt ./
  cp ../../ADX/R_{1..10}/*K4*.qopt ./
  cp ../../ADX/R_{1..10}/*K5*.qopt ./
- 
- #For each directory, add two additional columns for distruct
+
+ #For each directory, add two additional columns for distruct (id/label columns CLUMPP expects)
  for i in `ls -1 *qopt` ; do  paste pre $i post > $i.Q; done
- 
- #merge each Q file for each K
+
+ #merge each Q file for each K (concatenate replicate runs into one file per K)
  cat *Q > pop_K5_combined.txt
  cat *Q > pop_K4_combined.txt
  cat *Q > pop_K3_combined.txt
- 
+
  module load CLUMPP/1.1.2
  CLUMPP
- 
- 
- 
- DATATYPE 1 
+
+
+ # CLUMPP parameter file (below) for the K=5 run; same structure is reused for K=3/K=4
+ DATATYPE 1
 INDFILE NOTNEEDED.indfile 
 POPFILE pop_K5_combined.txt 
 OUTFILE pop_K5-combined-merged.txt 

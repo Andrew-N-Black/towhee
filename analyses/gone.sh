@@ -8,5 +8,9 @@
 #SBATCH --output=%x_%j.out
 #SBATCH --mem=249G
 
+# =============================================================================
+# GONE: LD-based reconstruction of recent historical effective population
+# size (Ne) through time, run once per population. Output feeds R/gone.R.
+# =============================================================================
 POP=CCAL,SCAL,OREG,INYO
 bash script_GONE.sh $POP

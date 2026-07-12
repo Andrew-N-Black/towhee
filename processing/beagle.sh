@@ -6,6 +6,12 @@
 #SBATCH --error=towhee.e
 #SBATCH --output=towhee.o
 #SBATCH --mem=35G
+# =============================================================================
+# GENOTYPE LIKELIHOODS (beagle format) + BEAGLE GENOTYPE CALLING
+# Computes ANGSD genotype likelihoods for PCA/admixture input, then separately
+# calls a BCF/VCF of genotype posteriors and runs Beagle to impute/call hard
+# genotypes from those likelihoods.
+# =============================================================================
 module load biocontainers
 module load angsd
 #Move to bam folder
@@ -14,7 +20,7 @@ angsd -GL 1 -out PCA/towhee -minQ 30 -P 20 \
 -ref /scratch/bell/blackan/TOWHEE/ref/NCBI/ref.fa
 
 
-#Generate angsd output files for all OK regions
+#Generate angsd output files for all OK regions (callable sites, autosomal, MAF-filtered)
 cd $WD
 angsd -P 8 \
 -bam ./revised_bamsSub.txt -doBcf 1 -gl 1 -dopost 1 -domajorminor 1 -domaf 1 -minMaf 0.05 -rmTriallelic 1  \
@@ -28,7 +34,7 @@ cd ../angsd_out
 #autosomes
 bcftools convert -O b -o towhee-DOC3-maf.05.vcf  towhee-DOC3-maf.05.bcf
 
-#Use beagle to call genotypes from Genotype likelihoods
+#Use beagle (the genotype-calling tool, not ANGSD's beagle-format output above) to call genotypes from genotype likelihoods
 #Autosomes
 ml openjdk/11.0.17_8
 java -Xmx100g -jar beagle.27Jan18.7e1.jar gl=towhee-DOC3-maf.05.vcf out=towheeDOC3-genotypes

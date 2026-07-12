@@ -7,6 +7,12 @@
 #SBATCH -e %x_%j.err
 #SBATCH -o %x_%j.out
 
+# =============================================================================
+# SPATIAL Fst BETWEEN SAMPLING SITES — MALES ONLY
+# Same workflow as fst-sites.sh, restricted to male bam lists. Site4 is
+# skipped throughout (no males sampled there).
+# =============================================================================
+
 #This script modified from a script written by Andrew Black
 
 module load biocontainers

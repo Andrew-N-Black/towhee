@@ -2,11 +2,18 @@
 #Focus on the first 100 generations:
 +scale_color_manual(values=c("#1F78B4","#B2DF8A","#A6CEE3","#33A02C")
 
+# =============================================================================
+# HISTORICAL EFFECTIVE POPULATION SIZE (Ne) THROUGH TIME, PER POPULATION
+# Reads 500 GONE bootstrap replicates (LD-based Ne estimates per generation)
+# for each of the four towhee populations and plots the median trajectory
+# with 50% and 95% confidence bands. Input files come from analyses/gone.sh.
+# =============================================================================
+
 par(xpd=FALSE,mfrow=c(1,1))
 library(scales)
 library(matrixStats)
 
-#SCAL
+#SCAL — read the 500 bootstrap replicate files and stack Ne estimates by generation
 plot(c(0,100),c(0,5000000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 files <- paste("SCAL_outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
@@ -15,7 +22,7 @@ for(i in 1:500){
     dat <- read.table(files[i],skip=2)
     NeMat <- cbind(NeMat,dat[,2])
 }
-# get CI
+# get CI: 95% (NeCI) and 50% (NeCI2) quantile bands across the 500 bootstrap replicates, per generation
 NeCI <- matrix(NA,nrow=500,ncol=2)
 NeCI2 <- matrix(NA,nrow=500,ncol=2)
 for(i in 1:500){
@@ -28,7 +35,7 @@ polygon(x=c(1:500,rev(1:500)),y=c(NeCI2[1:500,1],rev(NeCI2[1:500,2])),col=adjust
 par(xpd=FALSE,mfrow=c(1,1))
 
 
-#CCAL
+#CCAL — same procedure as SCAL above
 plot(c(0,100),c(0,5000000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 files <- paste("CCAL_outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")
@@ -50,7 +57,7 @@ polygon(x=c(1:500,rev(1:500)),y=c(NeCI2[1:500,1],rev(NeCI2[1:500,2])),col=adjust
 par(xpd=FALSE,mfrow=c(1,1))
 
 
-#INYO
+#INYO — same procedure as SCAL above
 plot(c(0,100),c(0,1000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 
@@ -74,7 +81,7 @@ lines(1:500,rowMedians(NeMat[1:500,]),col="#B2DF8A",lwd=4)
 polygon(x=c(1:500,rev(1:500)),y=c(NeCI[1:500,1],rev(NeCI[1:500,2])),col=adjustcolor("#B2DF8A",alpha.f=0.2),border=NA)
 polygon(x=c(1:500,rev(1:500)),y=c(NeCI2[1:500,1],rev(NeCI2[1:500,2])),col=adjustcolor("#B2DF8A",alpha.f=0.3),border=NA)
 
-#OREG
+#OREG — same procedure as SCAL above
 plot(c(0,100),c(0,3000),type="n",xlab="Generations back in time",ylab=expression(paste("Historical ",italic(""*N*"")[e],sep="")),
      cex.lab=1.5)
 files <- paste("OREG_outfileLD_TEMP/outfileLD_",1:500,"_GONE_Nebest",sep="")

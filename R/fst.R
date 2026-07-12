@@ -1,3 +1,8 @@
+# =============================================================================
+# Fst MANHATTAN PLOTS: sliding-window pairwise Fst between towhee populations
+# (CCAL, INYO, OREG, SCAL), one plot per pairwise comparison, generated from
+# ANGSD/realSFS sliding-window output (see analyses/fst.sh).
+# =============================================================================
 
 library(qqman)
 library(svglite)

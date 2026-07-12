@@ -7,7 +7,11 @@
 #SBATCH -e vcf.err
 #SBATCH -o vcf.o
 
-
+# =============================================================================
+# VARIANT CALLING: mpileup + call variant sites across all samples in bamlist,
+# producing a raw multi-sample VCF for downstream phylogenetic tree building
+# (see nu_tree.sh / mt_tree.sh).
+# =============================================================================
 
 module purge
 module load biocontainers
@@ -16,8 +20,6 @@ module load bioinfo
 module load bcftools/1.15.1
 module load iqtree/2.1.2
 
-
-
-
+# Call variant (multiallelic, variants-only) sites from pileups across all BAMs
 bcftools mpileup -f /scratch/bell/blackan/TOWHEE/ref/NCBI/ref_100kb.fa \
  -b bamlist | bcftools call -mv -Ov -o towhee_raw.vcf

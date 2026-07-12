@@ -8,6 +8,12 @@
 #SBATCH -o fst.out
 #SBATCH --mem=235G
 
+# =============================================================================
+# PAIRWISE Fst BETWEEN THE FOUR TOWHEE POPULATIONS (OREG, CCAL, INYO, SCAL)
+# ANGSD site allele frequency likelihoods -> 1D/2D SFS (realSFS) -> pairwise
+# and sliding-window Fst. Feeds R/fst.R (Manhattan plots).
+# =============================================================================
+
 module load biocontainers
 module load angsd
 
@@ -51,14 +57,14 @@ angsd -P 126 -out /scratch/bell/blackan/TOWHEE/angsd_out/FST/SCAL \
 -bam ./SCAL_bamlist.txt -doCounts 1 -GL 1 -doSaf 1 -anc $REF -ref $REF
 
 
-#calculate the 1D SFS from allele freq likelihoods
+#calculate the 1D SFS (site frequency spectrum) from allele freq likelihoods, per population
 realSFS FST/OREG.saf.idx -P 126 -fold 1 > FST/OREG.sfs
 realSFS FST/CCAL.saf.idx -P 126 -fold 1 > FST/CCAL.sfs
 realSFS FST/INYO.saf.idx -P 126 -fold 1 > FST/INYO.sfs
 realSFS FST/SCAL.saf.idx -P 126 -fold 1 > FST/SCAL.sfs
 
 
-#calculate the 2D SFS
+#calculate the 2D SFS (joint spectrum) for each population pair, used as the Fst prior
 realSFS FST/OREG.saf.idx FST/CCAL.saf.idx -P 126 > FST/OREG.CCAL.ml
 realSFS FST/OREG.saf.idx FST/INYO.saf.idx -P 126 > FST/OREG.INYO.ml
 realSFS FST/OREG.saf.idx FST/SCAL.saf.idx -P 126 > FST/OREG.SCAL.ml
@@ -88,13 +94,13 @@ realSFS fst stats FST/out/INYO.SCAK.fst.idx
 
 
 
-#sliding window analysis among all population samples
+#sliding window analysis among all population samples (50kb windows, 25kb step)
 
 realSFS fst index FST/OREG.saf.idx FST/CCAL.saf.idx FST/INYO.saf.idx FST/SCAL.saf.idx -sfs FST/OREG.CCAL.ml -sfs FST/OREG.INYO.ml -sfs FST/OREG.SCAL.ml -sfs FST/CCAL.INYO.ml  -sfs FST/CCAL.SCAL.ml  -sfs FST/INYO.SCAL.ml -fstout FST/out/four_pop -P 126
 
 realSFS fst stats2 FST/four_pop.fst.idx -win 50000 -step 25000 -P 126 > FST/out/slidingwindow
 
-#Calculate average fst for each sliding windown analysis:
+#Calculate average fst for each sliding window analysis (columns 5-8 = pairwise Fst columns):
 #cut -f 5 slidingwindow | tail -n +2 | awk '{ sum += $1 } END { print(sum / NR) }'
 
 #cut -f 6 slidingwindow | tail -n +2 | awk '{ sum += $1 } END { print(sum / NR) }'

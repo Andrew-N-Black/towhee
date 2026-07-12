@@ -1,6 +1,8 @@
 # =============================================================================
 # GENOMIC DIVERSITY ANALYSIS: Heterozygosity and Runs of Homozygosity (ROH)
-# Compares genetic diversity metrics across IUCN conservation status categories
+# Compares genetic diversity metrics across a broader panel of songbird
+# (passerine) species/populations, grouped by IUCN conservation status
+# category, to contextualize the California towhee results.
 # =============================================================================
 
 # ─── SECTION 1: INDIVIDUAL HETEROZYGOSITY (H) BY SPECIES/POPULATION ──────────

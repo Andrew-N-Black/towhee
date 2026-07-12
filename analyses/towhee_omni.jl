@@ -1,3 +1,9 @@
+# =============================================================================
+# Omniscape.jl driver: runs the circuit-theory connectivity model over the
+# ResistanceGA-optimized resistance surface, producing cumulative and
+# normalized current maps. Called by towhee_omni.sh.
+# =============================================================================
+
 # Check and convert NoData values to NA in R
 # e.g.,
 #surf_f <- raster("/scratch/bell/jeon96/Towhee/rga/female/topo/Results/ele_low.slo_low.asp_low.asc")
@@ -19,8 +25,9 @@
 #using Pkg; Pkg.add(["Omniscape", "Rasters", "Plots"])
 using Omniscape, Rasters, Plots
 
+# Run Omniscape using the settings in omni_config.ini (resistance surface, radius, block size, etc.)
 currmap, flow_pot, norm_current = run_omniscape("/scratch/bell/jeon96/Towhee/omni_config.ini")
-                                                
+
 exit()
 
 # Again in R - plotting

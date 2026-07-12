@@ -1,3 +1,9 @@
+# =============================================================================
+# SUPPLEMENTARY FIGURES: assembly, sequencing depth/breadth, mapping rate,
+# Phred quality, and PCA plots for the California towhee reference genome
+# and resequencing dataset.
+# =============================================================================
+
 #Load R packages
 library(ggplot2)
 library(readxl)
@@ -16,7 +22,7 @@ ggsave("S1aa.svg")
 ggsave("S1aa.pdf")
 
 
-#Pre/post breadth
+#Pre/post breadth (fraction of genome covered at 1x/5x, before vs after filtering)
 depth_breadth <- read_excel("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/summary_stats.xlsx")
 depth_breadth$Pop <- factor(depth_breadth$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 
@@ -50,7 +56,7 @@ ggplot(data=depth_breadth, aes(y=Breadth5x, x=reorder(SampleID,Breadth5x),fill=P
 ggsave("S1d.svg")
 ggsave("S1d.pdf")
 
-#Mapping rate
+#Mapping rate (% reads mapped / properly paired, per sample)
 map <- read_excel("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/mapping_rate.xlsx")
 map$Pop <- factor(map$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
 ggplot(data=map, aes(y=MappingTotal, x=reorder(SampleID,MappingTotal),fill=Pop))+geom_bar(stat="identity")+theme_classic()+xlab("Sample (N=81)")+ylab("% Mapped Reads")+theme( axis.ticks.x=element_blank(),axis.text.x = element_blank())+ scale_fill_brewer(palette="Paired")+theme(legend.title=element_blank())
@@ -63,7 +69,7 @@ ggsave("S1f.svg")
 ggsave("S1f.pdf")
 
 
-#Figure S6, PCA
+#Figure S6, PCA (built from a PCAngsd covariance matrix eigendecomposition)
 
 sample_pop_sites <- read_excel("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/het.xlsx")
 sample_pop_sites$Pop <- factor(sample_pop_sites$Pop, levels = c("OREG","CCAL", "INYO","SCAL"))
@@ -81,7 +87,7 @@ ggsave("~/Figure_S6.pdf")
 
 
 
-#Phred score distribution (Fig_S3)
+#Phred score distribution (Fig_S3) — base quality histogram from a QC report
 
 phred<-read.table("~/LEPC_full_qaNF.qs",header = T)
 ggplot(phred, aes(x=qscore,y=counts)) + geom_bar(stat="identity")+theme_classic()+ scale_x_discrete(name ="Phred score",limits=c(13:37))+ylab("Number of bases") + geom_vline(xintercept = 30,linetype="dashed")
@@ -90,7 +96,7 @@ ggsave("~/phred_lepc.pdf")
 
 
 #Figure S12
-#PCA maf 0.10
+#PCA using a stricter minor allele frequency filter (MAF >= 0.10)
 cov<-as.matrix(read.table("/Users/andrew/Library/CloudStorage/Box-Box/Personal/Postdoc_Purdue/Towhee/Black_analysis/pca-towhee.maf.10.cov"))
 axes<-eigen(cov)
 head(axes$values/sum(axes$values)*100)

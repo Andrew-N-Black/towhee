@@ -1,3 +1,8 @@
+# =============================================================================
+# Evanno et al. (2005) deltaK plot for choosing the best-supported K
+# (number of ancestral populations) from ADMIXTURE/NGSadmix log-likelihoods.
+# =============================================================================
+
 library(ggplot2)
 library(readxl)
 delta <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/k.xlsx")

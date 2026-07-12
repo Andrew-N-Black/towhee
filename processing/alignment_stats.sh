@@ -7,6 +7,13 @@
 #SBATCH --output=align.out
 #SBATCH --job-name=produce_align_SLURMM_jobs
 
+# =============================================================================
+# ALIGNMENT STATS job generator
+# Companion to alignment.sh: for each sample, writes a per-sample SLURM job
+# that (re)indexes the fixmate BAM and computes mean depth and 1x/5x/10x
+# breadth-of-coverage summary stats. Submit the generated jobs2/*.sh scripts
+# separately.
+# =============================================================================
 
 module purge
 module load bioinfo
@@ -23,7 +30,7 @@ ls -1 *.fastq.gz | sed "s/_R[1-2]_001.fastq.gz//g" | uniq > sample.list
 #Make directory to hold all SLURMM jobs
 mkdir jobs2
 
-
+# Generate one SLURM job script per sample
 while read -a line
 do 
 	echo "#!/bin/sh -l
@@ -66,4 +73,4 @@ samtools depth -a ${line[0]}.fixmate.bam \
 done < sample.list
 
 
-#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source jobs
+#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source jobs  # submit all generated jobs

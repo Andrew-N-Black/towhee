@@ -7,6 +7,15 @@
 #SBATCH --output=align.out
 #SBATCH --job-name=produce_align_SLURMM_jobs
 
+# =============================================================================
+# ALIGNMENT job generator
+# For each sample in the raw fastq directory, writes a per-sample SLURM job
+# that: aligns reads with BWA-MEM, validates/sorts the SAM, marks duplicates,
+# locally realigns around indels (GATK3), filters to properly-paired
+# high-quality reads within callable regions (ok.bed from ref_format.sh), and
+# computes depth/breadth summary stats. Submit the generated jobs/*.sh scripts
+# separately.
+# =============================================================================
 
 module purge
 module load bioinfo
@@ -18,7 +27,7 @@ module load samtools
 
 #Move to fastq containing directory
 cd /scratch/bell/blackan/TOWHEE/raw
-#Make sample list
+#Make sample list (strip R1/R2 suffixes so paired files collapse to one sample entry)
 ls -1 *.fastq.gz | sed "s/_R[1-2]_001.fastq.gz//g" | uniq > sample.list
 #Make directory to hold all SLURMM jobs
 mkdir jobs
@@ -31,8 +40,9 @@ FILT=/scratch/bell/blackan/TOWHEE/ref/NCBI/ok.bed
 #PicardCommandLine CreateSequenceDictionary reference=$REF output=$DICT
 
 
+# Generate one SLURM job script per sample
 while read -a line
-do 
+do
 	echo "#!/bin/sh -l
 #SBATCH -A fnrchook
 #SBATCH -n 10
@@ -106,4 +116,4 @@ samtools stats /scratch/bell/sjanjua/towhee/lcwgs/align-caltref/dedup_${line}.to
 done < sample.list
 
 
-#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source jobs
+#for i in `ls -1 *sh`; do  echo "sbatch $i" ; done > jobs ; source jobs  # submit all generated jobs

@@ -9,6 +9,11 @@
 #SBATCH --mail-user=jeon96@purdue.edu
 #SBATCH -o %x_%j.log
 
+# =============================================================================
+# Launches the ResistanceGA landscape-resistance optimization (R/towhee_rga.R)
+# as a SLURM job, after loading the required geospatial libraries.
+# =============================================================================
+
 #install.packages("raster", repos="https://cran.case.edu/")
 
 #load modules

@@ -1,3 +1,9 @@
+# =============================================================================
+# LINKAGE-DISEQUILIBRIUM EFFECTIVE POPULATION SIZE (LDNe) PER POPULATION
+# Aggregates 999 permuted ngsLD runs per population, computes a bias-corrected
+# mean r^2 (Waples 2006 sample-size correction), then converts to Ne.
+# =============================================================================
+
 library(plyr)
 library(dplyr)
 library(ggplot2)
@@ -10,7 +16,8 @@ setwd("/scratch/bell/mathur20/towhee/results/ngsLD/shuff")
 popInfo <- read.csv("../sampleinfo.csv",header =T)
 popInfo <- popInfo[,c(1:3)]
 
-
+# For each of 999 permutation runs and each population, load pairwise LD (ngsLD)
+# output, compute mean r2, and apply the Waples (2006) sample-size bias correction
 df.ldne <- NULL
 for (i in stringr::str_pad(1:999, width = 3, pad = "0"))
 {
@@ -53,5 +60,6 @@ for (i in 1:dim(df.ldne)[1])
 
 
 df.ldne <- cbind(df.ldne,ldne)
+# Mean and SD of the per-run Ne estimates, summarized by population
 df.ldne.mean <- ddply(df.ldne, "Pop", summarise, meanldNe=mean(ldne),sdldNe=sd(ldne))
 print(df.ldne.mean)

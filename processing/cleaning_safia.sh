@@ -7,7 +7,11 @@
 #SBATCH -e adapter_removal
 #SBATCH -o adapter_removal
 
-
+# =============================================================================
+# READ CLEANING job generator: for each sample listed in samples.txt, writes
+# and submits a per-sample SLURM job that runs Trimmomatic paired-end adapter
+# and quality trimming (Nextera adapters, leading/trailing Q20, min length 30).
+# =============================================================================
 
 cd $SLURM_SUBMIT_DIR
 
@@ -48,7 +52,7 @@ done < samples.txt
 #
 #
 
-#Step2: Run job in the errors folder for each sample
+#Step2: Submit each generated job from the errors folder (so SLURM logs land there)
 
 while read -a sample
 do

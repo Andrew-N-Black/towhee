@@ -1,4 +1,8 @@
-
+# =============================================================================
+# FIGURE 2: BUSCO completeness comparison across passerine reference genomes
+# Stacked horizontal bars showing % complete/duplicated/fragmented/missing
+# BUSCO genes for the California towhee vs. related species.
+# =============================================================================
 
 library(reshape2)
 library(readxl)
