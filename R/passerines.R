@@ -36,8 +36,12 @@ ggplot(H, aes(y = H, x = reorder(SHORT, H))) +
                                   "#A6CEE3", "#33A02C", "grey"))
 
 
-# ─── SECTION 2: fROH BY Binary IUCN assignment ───────────────────────────────────
-# fROH = fraction of genome in Runs of Homozygosity; relative inbreeding
+# ─── SECTION 2: fROH BY SPECIES/POPULATION ───────────────────────────────────
+# fROH = fraction of genome in Runs of Homozygosity; proxy for inbreeding
+
+library(readxl)
+library(reshape2)
+library(ggplot2)
 
 # Load ROH data for songbirds
 SONG_BIRDS_roh <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/SONG_BIRDS-rohC.xlsx")
@@ -71,7 +75,7 @@ ggplot(roh, aes(y = value, x = SHORT)) +
     geom_boxplot(aes(color = SHORT)) +
     geom_jitter(aes(color = SHORT), width = 0.4, alpha = 0.5) +
     geom_text(data = n_labels, aes(x = SHORT, y = -Inf, label = n),
-              inherit.aes = FALSE, vjust = -0.4, size = 5) +
+              inherit.aes = FALSE, vjust = -0.4) +
     coord_cartesian(ylim = c(-0.01, NA)) +
     theme_classic(base_size = 22) +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
