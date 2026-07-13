@@ -18,7 +18,8 @@ H <- read_excel("/Users/andrewblack/Documents/Research/Towhee/Black_analysis/H.x
 H$SHORT <- as.factor(H$SHORT)
 
 # Boxplot of heterozygosity (H) by population/species, ordered by median H
-# - Colors are manually assigned per group
+# - Colors are manually assigned per group (named vector, so it's immune to
+#   however reorder() below sorts the SHORT levels)
 # - Dashed line marks a reference heterozygosity value (e.g., a benchmark species)
 # - Median sample sizes are displayed above each box via stat_summary
 ggplot(H, aes(y = H, x = reorder(SHORT, H))) +
@@ -29,11 +30,17 @@ ggplot(H, aes(y = H, x = reorder(SHORT, H))) +
     ylab("H") +
     theme(legend.position = "none") +
     geom_hline(yintercept = 0.0017970595, linetype = "dashed") + # Reference H value
-    stat_summary(fun.y = median, fun.ymax = length,              # Show sample size (n) above boxes
-                 geom = "text", aes(label = ..ymax..), vjust = -1) +
+    stat_summary(fun = median, fun.max = length,                 # Show sample size (n) above boxes
+                 geom = "text", aes(label = after_stat(ymax)), vjust = -1) +
     ylim(0, 0.025) +
-    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
-                                  "#A6CEE3", "#33A02C", "grey"))
+    scale_color_manual(values = c(
+        "CCAL"            = "#1F78B4",
+        "INYO"            = "#B2DF8A",
+        "Threatened"      = "grey",
+        "Non-Threatened"  = "grey40",
+        "OREG"            = "#A6CEE3",
+        "SCAL"            = "#33A02C"
+    ))
 
 
 # ─── SECTION 2: fROH BY SPECIES/POPULATION ───────────────────────────────────
@@ -75,14 +82,20 @@ ggplot(roh, aes(y = value, x = SHORT)) +
     geom_boxplot(aes(color = SHORT)) +
     geom_jitter(aes(color = SHORT), width = 0.4, alpha = 0.5) +
     geom_text(data = n_labels, aes(x = SHORT, y = -Inf, label = n),
-              inherit.aes = FALSE, vjust = -0.4) +
-    coord_cartesian(ylim = c(-0.01, NA)) +
+              inherit.aes = FALSE, vjust = -0.3, size = 5) +
+    coord_cartesian(xlim = c(-0.1, NA)) +
     theme_classic(base_size = 22) +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     xlab("") +
     ylab("fROH") +
-    scale_color_manual(values = c("#1F78B4", "#B2DF8A", "grey",
-                                  "#A6CEE3", "#33A02C", "grey", "grey")) +
+    scale_color_manual(values = c(
+        "CCAL"            = "#1F78B4",
+        "INYO"            = "#B2DF8A",
+        "Threatened"      = "grey",
+        "Non-Threatened"  = "grey40",
+        "OREG"            = "#A6CEE3",
+        "SCAL"            = "#33A02C"
+    )) +
     theme(legend.position = "none") +
     facet_wrap(~variable, scales = "free_y") # Separate panel per ROH size class
 
