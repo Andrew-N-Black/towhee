@@ -1,4 +1,5 @@
 Natural and anthropogenic drivers of genomic diversity in the California towhee: conservation implications for peripheral populations  
+*Unpublished-In Revision
 
 
 
@@ -123,7 +124,7 @@ Natural and anthropogenic drivers of genomic diversity in the California towhee:
 -analyses/mt_tree.sh
 
 
-**"plotting / summary statistics"**
+**"plotting/summary statistics"**
 
 
 -R/*.R`
